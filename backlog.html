@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grace's Backlog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;font-size:16px;background:#F2F0EB;color:#1a1a18;padding:1.5rem 0 4rem}
+.dash{max-width:860px;margin:0 auto;padding:0 1.5rem}
+
+/* Header */
+.site-header{background:#D8DCE8;border-radius:12px;margin-bottom:1.25rem;overflow:hidden}
+.site-header-stripe{display:flex;height:6px}
+.site-header-stripe div{flex:1}
+.site-header-inner{padding:1.4rem 1.5rem .75rem;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;position:relative}
+.site-header-eyebrow{font-size:12px;font-weight:500;letter-spacing:.12em;color:#1A2438;text-transform:uppercase;margin-bottom:.2rem}
+.site-header-title{font-family:'Josefin Sans',sans-serif;font-size:38px;font-weight:600;color:#1A2438;line-height:1;margin-bottom:.8rem;letter-spacing:.05em;text-transform:uppercase}
+.site-header-links{display:flex;gap:8px;padding-top:0;flex-wrap:wrap;align-items:center}
+#status{font-size:12px;color:#2C3A58;margin-top:.4rem;min-height:16px}
+
+/* Buttons */
+button{padding:6px 12px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font-size:13px;font-family:inherit;cursor:pointer;background:#fff}
+.btn-primary{background:#4A5A80;border-color:#4A5A80;color:#fff;font-weight:500}
+.btn-ghost{background:none;border:0.5px solid #8A9AB8;color:#2C3A58;font-size:13px}
+
+/* Carousel */
+.carousel-wrap{overflow:hidden;width:100%;margin-top:.75rem;mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,black 8%,black 92%,transparent 100%)}
+.carousel-track{display:flex;gap:8px;width:max-content;animation:scroll-left 40s linear infinite}
+.carousel-track:hover{animation-play-state:paused}
+@keyframes scroll-left{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.carousel-img{width:48px;height:48px;border-radius:6px;object-fit:cover;flex-shrink:0;opacity:.8;transition:opacity .2s}
+.carousel-img:hover{opacity:1}
+/* Priority tabs */
+.ptabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem}
+.ptab{background:transparent;border:none;padding:6px 14px;cursor:pointer;font-size:14px;color:#555;font-family:inherit;border-radius:20px}
+.ptab.on{font-weight:500;color:#fff}
+.ptab-must.on{background:#C4477A}
+.ptab-might.on{background:#6A7050}
+.ptab-could.on{background:#4A5A80}
+.ptab-all.on{background:#C4477A}
+
+/* Filter/sort bar */
+.filter-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:1.25rem;max-width:100%}
+.filter-bar input{flex:2;min-width:180px;padding:8px 12px;border:0.5px solid rgba(0,0,0,.15);border-radius:8px;font-size:14px;font-family:inherit;background:#fff}
+.filter-bar select{padding:8px 10px;border:0.5px solid rgba(0,0,0,.15);border-radius:8px;font-size:13px;font-family:inherit;background:#fff;flex:1}
+
+/* Cards grid */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:12px}
+.card{background:#fff;border:0.5px solid rgba(0,0,0,.1);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.card-img{width:100%;padding-top:160%;position:relative;overflow:hidden}
+.card-img-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:42px}
+.card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card-body{padding:.85rem;flex:1;display:flex;flex-direction:column;gap:6px}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.card-title{font-size:15px;font-weight:600;line-height:1.3;flex:1}
+.card-creator{font-size:12px;color:#666}
+.card-note{font-size:12px;color:#888;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.card-source{font-size:11px;color:#aaa;font-style:italic}
+.card-footer{display:flex;flex-direction:column;gap:6px;margin-top:auto;padding-top:8px}
+.card-footer-top{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.log-btn{width:100%}
+.card-actions{display:flex;gap:4px}
+.icnbtn{border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:12px;padding:0;display:flex;align-items:center;justify-content:center;font-family:inherit;opacity:.7;background:#f5f4f0}
+.icnbtn:hover{opacity:1}
+
+/* Priority pill */
+.ppill{display:inline-block;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.ppill-must{background:#F5E0EA;color:#C4477A}
+.ppill-might{background:#FDF3D0;color:#7A5A00}
+.ppill-could{background:#E6EBF8;color:#2C3E8C}
+
+/* Type pill */
+.tpill{display:inline-block;font-size:11px;font-weight:500;padding:2px 8px;border-radius:99px;white-space:nowrap}
+
+/* Log button */
+.log-btn{font-size:12px;padding:5px 12px;border-radius:99px;background:#C4477A;color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:500;white-space:nowrap}
+.log-btn:hover{background:#A83567}
+
+/* Modal */
+.mwrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:1rem}
+.mwrap.open{display:flex}
+.mbox{background:#fff;border-radius:16px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.mbox-header{padding:1.25rem 1.5rem 1rem;display:flex;align-items:flex-start;gap:1rem}
+.mbox-cover{width:70px;height:70px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;transition:background .3s}
+.mbox-cover img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.mbox-header-text{flex:1}
+.mbox-type-label{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;opacity:.6;margin-bottom:3px}
+.mbox-title-display{font-size:17px;font-weight:700;line-height:1.2;min-height:22px}
+.mbox-creator-display{font-size:13px;opacity:.7;margin-top:2px;min-height:18px}
+.mbox-close{background:none;border:none;font-size:22px;cursor:pointer;line-height:1;padding:0;opacity:.4;flex-shrink:0}
+.mbox-close:hover{opacity:1}
+.mbox-body{padding:.75rem 1.5rem 1.5rem;display:flex;flex-direction:column;gap:10px;max-height:70vh;overflow-y:auto;overflow-x:visible}
+.mbox-label{font-size:12px;color:#666;margin-bottom:3px;display:block}
+input,select,textarea{box-sizing:border-box;width:100%;padding:8px 10px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font-size:14px;font-family:inherit;background:#fff;margin:0}
+
+.view-toggle{display:flex;gap:4px;background:#fff;border:0.5px solid rgba(0,0,0,.12);border-radius:8px;padding:3px}
+.view-btn{background:none;border:none;cursor:pointer;padding:5px 8px;border-radius:6px;font-size:14px;line-height:1;color:#888}
+.view-btn.on{background:#C4477A;color:#fff}
+.list-view{display:flex;flex-direction:column;gap:2px}
+.list-row{display:flex;align-items:center;gap:10px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:10px;padding:8px 12px;transition:background .1s}
+.list-row:hover{background:#f8f7f5}
+.list-thumb{width:32px;height:32px;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;overflow:hidden}
+.list-thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px}
+.list-title{font-size:14px;font-weight:500;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.list-creator{font-size:12px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:130px;flex-shrink:0}
+.list-source{font-size:11px;color:#aaa;font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100px;flex-shrink:0}
+.list-actions{display:flex;gap:3px;flex-shrink:0;opacity:0}
+.list-row:hover .list-actions{opacity:1}
+@media(max-width:600px){.list-creator,.list-source{display:none}.list-actions{opacity:1}}
+
+/* Lookup dropdown */
+.lookup-wrap{position:relative}
+.lookup-results{display:none;position:fixed;background:#fff;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;z-index:999;max-height:220px;overflow-y:auto;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.lookup-results.open{display:block}
+.lookup-item{display:flex;align-items:center;gap:10px;padding:8px 10px;cursor:pointer;border-bottom:0.5px solid rgba(0,0,0,.06)}
+.lookup-item:last-child{border-bottom:none}
+.lookup-item:hover{background:#f5f4f0}
+.lookup-thumb{width:36px;height:36px;border-radius:5px;object-fit:cover;flex-shrink:0;background:#eee}
+.lookup-info{flex:1;min-width:0}
+.lookup-title{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lookup-creator{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lookup-searching{padding:10px;text-align:center;font-size:13px;color:#999}
+
+/* Empty state */
+#empty{display:none;text-align:center;padding:4rem 1rem;color:#999}
+#empty .e-icon{font-size:48px;margin-bottom:1rem}
+#empty p{font-size:15px}
+
+@media(max-width:600px){
+  body{padding:0 0 3rem}
+  .site-header{border-radius:12px}
+  .site-header-inner{padding:1rem 1.1rem .6rem;position:relative}
+  .site-header-title{font-size:28px}
+  .site-header-links{position:absolute;top:1rem;right:1rem}
+  .dash{padding:0 1rem}
+  .cards{grid-template-columns:1fr}
+  .mbox-body{max-height:80vh}
+  .ptabs{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<!-- ADD/EDIT MODAL -->
+<div class="mwrap" id="mwrap">
+  <div class="mbox">
+    <div class="mbox-header" id="mbox-header">
+      <div class="mbox-cover" id="mbox-cover">📚</div>
+      <div class="mbox-header-text">
+        <div class="mbox-type-label" id="mbox-type-label">Book</div>
+        <div class="mbox-title-display" id="mbox-title-display">Title</div>
+        <div class="mbox-creator-display" id="mbox-creator-display"></div>
+      </div>
+      <button class="mbox-close" onclick="closeM()">&times;</button>
+    </div>
+    <div class="mbox-body">
+      <div>
+        <label class="mbox-label">Type</label>
+        <select id="ft" onchange="updLbl();updateFormTheme()">
+          <option value="book">Book</option>
+          <option value="music">Music / album</option>
+          <option value="tv">TV show</option>
+          <option value="movie">Movie</option>
+          <option value="concert">Live Event</option>
+        </select>
+      </div>
+      <div>
+        <label class="mbox-label">Title <span style="font-weight:400;opacity:.6;font-size:11px" id="lookup-hint">— type to search</span></label>
+        <div class="lookup-wrap">
+          <input id="ftitle" type="text" placeholder="Title..." oninput="onTitleInput()" autocomplete="off">
+          <div class="lookup-results" id="lookup-results"></div>
+        </div>
+        <div id="terr" style="font-size:13px;color:#c00;margin-top:3px;display:none">Required.</div>
+      </div>
+      <div>
+        <label class="mbox-label" id="clbl">Author / Creator</label>
+        <input id="fcreator" type="text" oninput="updateFormPreview()">
+      </div>
+      <div>
+        <label class="mbox-label">Priority</label>
+        <select id="fpriority">
+          <option value="must">Must — top of the list</option>
+          <option value="might">Might — genuinely interested</option>
+          <option value="could">Could — someday maybe</option>
+        </select>
+      </div>
+      <div>
+        <label class="mbox-label">Why you want it / Notes</label>
+        <textarea id="fnotes" rows="2" style="resize:vertical"></textarea>
+      </div>
+      <div>
+        <label class="mbox-label">Source <span style="font-weight:400;opacity:.6">(who recommended it / where you heard about it)</span></label>
+        <input id="fsource" type="text" placeholder="e.g. Laura, NYT review, Twitter...">
+      </div>
+      <div>
+        <label class="mbox-label">Image URL <span style="font-weight:400;opacity:.6">(optional)</span></label>
+        <input id="fimgurl" type="url" placeholder="https://...">
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button onclick="saveE()" style="flex:1;font-weight:500;background:#4A5A80;border-color:#4A5A80;color:#fff" id="savebtn">Save</button>
+        <button onclick="closeM()" style="flex:1">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div style="max-width:860px;margin:0 auto 1.5rem;padding:0 1.5rem">
+<div class="site-header">
+  <div class="site-header-stripe">
+    <div style="background:#B8C4D8"></div>
+    <div style="background:#8A9AB8"></div>
+    <div style="background:#4A5A80"></div>
+    <div style="background:#8A9AB8"></div>
+    <div style="background:#B8C4D8"></div>
+  </div>
+  <div style="max-width:860px;margin:0 auto;overflow:hidden">
+  <div class="site-header-inner">
+    <div>
+      <div class="site-header-eyebrow">Grace's</div>
+      <div class="site-header-title">Backlog</div>
+      <div id="hdr-stats" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:#1A2438"></div>
+      <div id="status">Connecting...</div>
+    </div>
+    <div class="site-header-links">
+      <a href="index.html" style="font-size:12px;background:none;border:none;color:#4A5A80;padding:5px 0;text-decoration:none;font-family:inherit;opacity:.8">← Media Log</a>
+      <button id="login-btn" onclick="signIn()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign in</button>
+      <button id="logout-btn" onclick="signOut()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign out</button>
+      <button id="add-btn" onclick="openM(null)" style="font-size:12px;background:#C4477A;border:none;color:#fff;font-weight:500;border-radius:6px;padding:5px 12px;display:none">+ Add</button>
+    </div>
+  </div>
+  <div class="carousel-wrap" id="carousel-wrap" style="display:none;padding:0 1.5rem .85rem">
+    <div class="carousel-track" id="carousel-track"></div>
+  </div>
+  </div>
+</div>
+
+<div class="dash">
+  <!-- Priority tabs -->
+  <div class="ptabs">
+    <button class="ptab ptab-all on" onclick="setP('all')">All</button>
+    <button class="ptab ptab-must" onclick="setP('must')">🔥 Must</button>
+    <button class="ptab ptab-might" onclick="setP('might')">👀 Might</button>
+    <button class="ptab ptab-could" onclick="setP('could')">💭 Could</button>
+  </div>
+
+  <!-- Filter/sort bar -->
+  <div class="filter-bar">
+    <input id="search" type="text" placeholder="Search titles, creators, sources..." oninput="render()">
+    <select id="ftype" onchange="render()">
+      <option value="all">All types</option>
+      <option value="book">Books</option>
+      <option value="music">Music</option>
+      <option value="tv">TV</option>
+      <option value="movie">Movies</option>
+      <option value="concert">Live Events</option>
+    </select>
+    <select id="srt" onchange="render()">
+      <option value="d-">Newest first</option>
+      <option value="d+">Oldest first</option>
+      <option value="az">A–Z</option>
+      <option value="p">By priority</option>
+    </select>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+  <div id="cnt" style="font-size:14px;color:#666"></div>
+  <div class="view-toggle">
+    <button class="view-btn on" id="vbtn-cards" onclick="setView('cards')" title="Card view">&#x229E;</button>
+    <button class="view-btn" id="vbtn-list" onclick="setView('list')" title="List view">&#9776;</button>
+  </div>
+</div>
+  <div class="cards" id="cards"></div>
+  <div id="empty">
+    <div class="e-icon">📋</div>
+    <p>Nothing in your backlog yet.<br>Hit + Add to start building your list.</p>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyC9tQzabbPW07TPmGwfG-1BJKlG2-C2QY4",
+  authDomain:"media-log-14b40.firebaseapp.com",
+  projectId:"media-log-14b40",
+  storageBucket:"media-log-14b40.firebasestorage.app",
+  messagingSenderId:"1015074403444",
+  appId:"1:1015074403444:web:886eb5875911029c928d21"
+});
+var db=firebase.firestore();
+var col=db.collection('backlog');
+var auth=firebase.auth();
+var currentUser=null;
+
+auth.onAuthStateChanged(function(user){
+  currentUser=user;
+  var addBtn=document.getElementById('add-btn');
+  var loginBtn=document.getElementById('login-btn');
+  var logoutBtn=document.getElementById('logout-btn');
+  if(user){
+    if(addBtn)addBtn.style.display='';
+    if(loginBtn)loginBtn.style.display='none';
+    if(logoutBtn)logoutBtn.style.display='';
+  } else {
+    if(addBtn)addBtn.style.display='none';
+    if(loginBtn)loginBtn.style.display='';
+    if(logoutBtn)logoutBtn.style.display='none';
+  }
+  render();
+});
+
+function signIn(){
+  var provider=new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(function(e){setStatus('Sign-in failed: '+e.message);});
+}
+function signOut(){
+  auth.signOut();
+}
+
+var CATS={
+  book:   {l:'Books',  sl:'Book',   e:'📚',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',cl:'Author'},
+  music:  {l:'Music',  sl:'Music',  e:'🎵',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',cl:'Artist'},
+  tv:     {l:'TV',     sl:'TV show',e:'📺',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',cl:'Creator'},
+  movie:  {l:'Movies', sl:'Movie',  e:'🎬',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',cl:'Director'},
+  concert:{l:'Live Events',sl:'Live Event',e:'🎸',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',cl:'Venue'}
+};
+var PRIORITY={
+  must: {l:'Must',cls:'ppill-must'},
+  might:{l:'Might',cls:'ppill-might'},
+  could:{l:'Could',cls:'ppill-could'}
+};
+var PORDER={must:0,might:1,could:2};
+
+var data=[],fPriority='all',editId=null,imgCache={};
+
+function setStatus(m){document.getElementById('status').textContent=m;}
+
+col.orderBy('date','desc').onSnapshot(function(snap){
+  data=[];
+  snap.forEach(function(doc){var d=doc.data();d.id=doc.id;data.push(d);});
+  setStatus('');render();
+},function(err){setStatus('Connection error.');console.error(err);});
+
+function loadImg(e,cb){
+  if(imgCache[e.id]!==undefined){cb(imgCache[e.id]&&(typeof imgCache[e.id]==='object'?imgCache[e.id].src:imgCache[e.id]));return;}
+  if(e.imgurl){imgCache[e.id]={src:e.imgurl,id:e.id};cb(e.imgurl);return;}
+  if(e.type==='book'){
+    var term=encodeURIComponent(e.title+(e.creator?' '+e.creator:''));
+    fetch('https://itunes.apple.com/search?term='+term+'&entity=ebook&limit=5')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=null;
+        if(d.results&&d.results.length){
+          for(var i=0;i<d.results.length;i++){
+            var r=d.results[i];
+            if(r.artworkUrl100&&r.trackName&&r.trackName.toLowerCase().indexOf(e.title.toLowerCase())!==-1){src=r.artworkUrl100.replace('100x100bb','600x600bb');break;}
+          }
+          if(!src&&d.results[0]&&d.results[0].artworkUrl100)src=d.results[0].artworkUrl100.replace('100x100bb','600x600bb');
+        }
+        imgCache[e.id]={src:src,id:e.id};cb(src);
+      }).catch(function(){imgCache[e.id]=null;cb(null);});
+  } else if(e.type==='tv'){
+    fetch('https://api.tvmaze.com/singlesearch/shows?q='+encodeURIComponent(e.title))
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=d&&d.image?(d.image.original||d.image.medium||null):null;
+        if(src)src=src.replace('http://','https://');
+        imgCache[e.id]={src:src,id:e.id};cb(src);
+      }).catch(function(){imgCache[e.id]=null;cb(null);});
+  } else if(e.type==='movie'||e.type==='music'){
+    var entity=e.type==='music'?'album':'movie';
+    var term=e.type==='music'?(e.creator+' '+e.title):e.title;
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(term)+'&entity='+entity+'&limit=3')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=d.results&&d.results[0]&&d.results[0].artworkUrl100?d.results[0].artworkUrl100.replace('100x100bb','600x600bb'):null;
+        imgCache[e.id]={src:src,id:e.id};cb(src);
+      }).catch(function(){imgCache[e.id]=null;cb(null);});
+  } else {imgCache[e.id]=null;cb(null);}
+}
+
+function applyThumb(id,src){
+  var el=document.getElementById('bl-'+id);
+  if(el&&src)el.innerHTML='<img src="'+src+'">';
+}
+
+// ── Form ──
+function updLbl(){document.getElementById('clbl').textContent=CATS[document.getElementById('ft').value].cl+' / Creator';var r=document.getElementById('lookup-results');if(r){r.classList.remove('open');r.innerHTML='';} }
+
+function updateFormTheme(){
+  var type=document.getElementById('ft').value;
+  var c=CATS[type];
+  var header=document.getElementById('mbox-header');
+  header.style.background=c.bg;
+  document.getElementById('mbox-cover').style.background=c.bg;
+  document.getElementById('mbox-type-label').style.color=c.tx;
+  document.getElementById('mbox-title-display').style.color=c.tx;
+  document.getElementById('mbox-creator-display').style.color=c.tx;
+  if(!document.getElementById('mbox-cover').querySelector('img'))
+    document.getElementById('mbox-cover').textContent=c.e;
+}
+
+var formImgTimer=null;
+var lookupTimer=null;
+
+function updateFormPreview(){
+  var title=document.getElementById('ftitle').value.trim();
+  var creator=document.getElementById('fcreator').value.trim();
+  var type=document.getElementById('ft').value;
+  var c=CATS[type];
+  document.getElementById('mbox-title-display').textContent=title||'Title';
+  document.getElementById('mbox-creator-display').textContent=creator||'';
+  document.getElementById('mbox-type-label').textContent=c.sl;
+  if(formImgTimer)clearTimeout(formImgTimer);
+  if(!title)return;
+  formImgTimer=setTimeout(function(){
+    var cover=document.getElementById('mbox-cover');
+    var fakeEntry={id:'preview',type:type,title:title,creator:creator,imgurl:document.getElementById('fimgurl').value.trim()};
+    delete imgCache['preview'];
+    loadImg(fakeEntry,function(src){
+      if(src)cover.innerHTML='<img src="'+src+'" style="width:100%;height:100%;object-fit:cover;border-radius:10px">';
+      else cover.innerHTML=c.e;
+    });
+  },600);
+}
+
+function positionLookup(){
+  var inp=document.getElementById('ftitle');
+  var res=document.getElementById('lookup-results');
+  var r=inp.getBoundingClientRect();
+  res.style.top=(r.bottom+2)+'px';
+  res.style.left=r.left+'px';
+  res.style.width=r.width+'px';
+}
+
+function onTitleInput(){
+  updateFormPreview();
+  var q=document.getElementById('ftitle').value.trim();
+  var type=document.getElementById('ft').value;
+  var res=document.getElementById('lookup-results');
+  if(lookupTimer)clearTimeout(lookupTimer);
+  if(q.length<2){res.classList.remove('open');res.innerHTML='';return;}
+  positionLookup();
+  res.innerHTML='<div class="lookup-searching">Searching...</div>';
+  res.classList.add('open');
+  lookupTimer=setTimeout(function(){doLookup(q,type);},400);
+}
+
+function doLookup(q,type){
+  var res=document.getElementById('lookup-results');
+  if(type==='book'){
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=ebook&limit=6')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        res.innerHTML='';
+        if(!d.results||!d.results.length){res.innerHTML='<div class="lookup-searching">No results.</div>';res.classList.add('open');return;}
+        d.results.slice(0,6).forEach(function(item){
+          var title=item.trackName||'';
+          var author=item.artistName||'';
+          var cover=item.artworkUrl100?item.artworkUrl100.replace('100x100bb','300x300bb'):'';
+          res.appendChild(makeLookupItem(title,author,cover,'📚'));
+        });
+        res.classList.add('open');
+      }).catch(function(){res.innerHTML='<div class="lookup-searching">Search unavailable.</div>';res.classList.add('open');});
+  } else if(type==='tv'){
+    fetch('https://api.tvmaze.com/search/shows?q='+encodeURIComponent(q))
+      .then(function(r){return r.json();})
+      .then(function(d){
+        res.innerHTML='';
+        if(!d||!d.length){res.innerHTML='<div class="lookup-searching">No results.</div>';res.classList.add('open');return;}
+        d.slice(0,6).forEach(function(item){
+          var show=item.show;
+          var cover=show.image?(show.image.medium||show.image.original||'').replace('http://','https://'):'' ;
+          res.appendChild(makeLookupItem(show.name||'',(show.network&&show.network.name)||(show.webChannel&&show.webChannel.name)||'',cover,'📺'));
+        });
+        res.classList.add('open');
+      }).catch(function(){res.innerHTML='<div class="lookup-searching">Search unavailable.</div>';res.classList.add('open');});
+  } else if(type==='movie'){
+    fetch('https://api.themoviedb.org/3/search/movie?query='+encodeURIComponent(q)+'&api_key=4d9d860ea45a2af876d72a8218f132e4&page=1')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        res.innerHTML='';
+        if(!d.results||!d.results.length){res.innerHTML='<div class="lookup-searching">No results.</div>';res.classList.add('open');return;}
+        d.results.slice(0,6).forEach(function(item){
+          var cover=item.poster_path?'https://image.tmdb.org/t/p/w185'+item.poster_path:'';
+          var year=item.release_date?item.release_date.slice(0,4):'';
+          res.appendChild(makeLookupItem(item.title+(year?' ('+year+')':''),'',cover,'🎬'));
+        });
+        res.classList.add('open');
+      }).catch(function(){res.innerHTML='<div class="lookup-searching">Search unavailable.</div>';res.classList.add('open');});
+  } else if(type==='music'){
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(q)+'&entity=album&limit=6')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        res.innerHTML='';
+        if(!d.results||!d.results.length){res.innerHTML='<div class="lookup-searching">No results.</div>';res.classList.add('open');return;}
+        d.results.slice(0,6).forEach(function(item){
+          var cover=item.artworkUrl100?item.artworkUrl100.replace('100x100bb','300x300bb'):'';
+          res.appendChild(makeLookupItem(item.collectionName||'',item.artistName||'',cover,'🎵'));
+        });
+        res.classList.add('open');
+      }).catch(function(){res.innerHTML='<div class="lookup-searching">Search unavailable.</div>';res.classList.add('open');});
+  } else {
+    res.classList.remove('open');res.innerHTML='';
+  }
+}
+
+function fillFromLookup(el){
+  var title=el.getAttribute('data-title')||'';
+  var creator=el.getAttribute('data-creator')||'';
+  var imgurl=el.getAttribute('data-img')||'';
+  document.getElementById('ftitle').value=title;
+  document.getElementById('fcreator').value=creator;
+  document.getElementById('fimgurl').value=imgurl;
+  document.getElementById('lookup-results').classList.remove('open');
+  document.getElementById('lookup-results').innerHTML='';
+  updateFormPreview();
+}
+
+function makeLookupItem(title,creator,cover,emoji){
+  var img=cover
+    ?'<img class="lookup-thumb" src="'+cover+'" onerror="this.style.opacity=.3">'
+    :'<div class="lookup-thumb" style="display:flex;align-items:center;justify-content:center;font-size:18px">'+emoji+'</div>';
+  var el=document.createElement('div');
+  el.className='lookup-item';
+  el.setAttribute('data-title',title);
+  el.setAttribute('data-creator',creator);
+  el.setAttribute('data-img',cover||'');
+  el.innerHTML=img+'<div class="lookup-info"><div class="lookup-title">'+title+'</div><div class="lookup-creator">'+creator+'</div></div>';
+  el.addEventListener('mousedown',function(e){e.preventDefault();fillFromLookup(this);});
+  return el;
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('mousedown',function(e){
+  if(!e.target.closest('.lookup-wrap')){
+    var r=document.getElementById('lookup-results');
+    if(r){r.classList.remove('open');r.innerHTML='';}
+  }
+});
+
+function openM(id){
+  editId=id;
+  var e=id?data.filter(function(x){return x.id===id;})[0]:null;
+  document.getElementById('savebtn').textContent=e?'Update':'Save to backlog';
+  document.getElementById('terr').style.display='none';
+  if(e){
+    document.getElementById('ftitle').value=e.title;
+    document.getElementById('mbox-title-display').textContent=e.title;
+    document.getElementById('fcreator').value=e.creator||'';
+    document.getElementById('mbox-creator-display').textContent=e.creator||'';
+    document.getElementById('fnotes').value=e.notes||'';
+    document.getElementById('fsource').value=e.source||'';
+    document.getElementById('fimgurl').value=e.imgurl||'';
+    var ftEl=document.getElementById('ft');
+    for(var i=0;i<ftEl.options.length;i++)if(ftEl.options[i].value===e.type){ftEl.selectedIndex=i;break;}
+    var fpEl=document.getElementById('fpriority');
+    for(var j=0;j<fpEl.options.length;j++)if(fpEl.options[j].value===e.priority){fpEl.selectedIndex=j;break;}
+    var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
+    if(cached)document.getElementById('mbox-cover').innerHTML='<img src="'+cached+'" style="width:100%;height:100%;object-fit:cover;border-radius:10px">';
+    else document.getElementById('mbox-cover').innerHTML=CATS[e.type].e;
+  } else {
+    document.getElementById('ftitle').value='';
+    document.getElementById('fcreator').value='';
+    document.getElementById('fnotes').value='';
+    document.getElementById('fsource').value='';
+    document.getElementById('fimgurl').value='';
+    document.getElementById('ft').selectedIndex=0;
+    document.getElementById('fpriority').selectedIndex=0;
+    document.getElementById('mbox-cover').innerHTML=CATS['book'].e;
+    document.getElementById('mbox-title-display').textContent='Title';
+    document.getElementById('mbox-creator-display').textContent='';
+  }
+  updLbl();updateFormTheme();
+  document.getElementById('mwrap').classList.add('open');
+  setTimeout(function(){document.getElementById('ftitle').focus();},50);
+}
+
+function closeM(){document.getElementById('mwrap').classList.remove('open');editId=null;}
+document.getElementById('mwrap').addEventListener('click',function(ev){if(ev.target===this)closeM();});
+
+function saveE(){
+  if(!currentUser){setStatus('Please sign in to save entries.');return;}
+  var title=document.getElementById('ftitle').value.trim();
+  if(!title){document.getElementById('terr').style.display='block';return;}
+  var savedEditId=editId;
+  var entry={
+    type:document.getElementById('ft').value,
+    title:title,
+    creator:document.getElementById('fcreator').value.trim(),
+    priority:document.getElementById('fpriority').value,
+    notes:document.getElementById('fnotes').value.trim(),
+    source:document.getElementById('fsource').value.trim(),
+    imgurl:document.getElementById('fimgurl').value.trim(),
+    date:new Date().toISOString().slice(0,10)
+  };
+  closeM();
+  setStatus('Saving...');
+  var p=savedEditId?col.doc(savedEditId).set(entry):col.add(entry);
+  p.then(function(){setStatus('Saved.');setTimeout(function(){setStatus('');},2000);})
+   .catch(function(err){setStatus('Error: '+err.message);});
+}
+
+function delE(id){
+  if(!currentUser){setStatus('Please sign in to delete entries.');return;}
+  if(!confirm('Remove from backlog?'))return;
+  col.doc(id).delete().catch(function(err){setStatus('Error: '+err.message);});
+}
+
+// ── Log it — opens media log with pre-filled URL params ──
+function logIt(id){
+  var e=data.filter(function(x){return x.id===id;})[0];
+  if(!e)return;
+  var params=new URLSearchParams({
+    type:e.type,
+    title:e.title,
+    creator:e.creator||'',
+    notes:e.notes||'',
+    imgurl:e.imgurl||'',
+    from_backlog:id
+  });
+  window.location.href='index.html?'+params.toString();
+}
+
+var viewMode='cards';
+function setView(v){
+  viewMode=v;
+  document.getElementById('vbtn-cards').classList.toggle('on',v==='cards');
+  document.getElementById('vbtn-list').classList.toggle('on',v==='list');
+  render();
+}
+function scrollToCard(id){
+  var el=document.getElementById('bl-'+id);
+  if(!el)return;
+  el.closest('.card').scrollIntoView({behavior:'smooth',block:'center'});
+  var card=el.closest('.card');
+  card.style.transition='box-shadow .3s';
+  card.style.boxShadow='0 0 0 3px #C4477A';
+  setTimeout(function(){card.style.boxShadow='';},1500);
+}
+
+function updateCarousel(){
+  var imgs=Object.values(imgCache).filter(function(s){return s&&(typeof s==='object'?s.src:s);});
+  if(!imgs.length){document.getElementById('carousel-wrap').style.display='none';return;}
+  var all=imgs.concat(imgs);
+  document.getElementById('carousel-track').innerHTML=all.map(function(item){
+    var src=typeof item==='object'?item.src:item;
+    var id=typeof item==='object'?item.id:'';
+    return '<img class="carousel-img" src="'+src+'" '+(id?'onclick="scrollToCard(\''+id+'\')" style="cursor:pointer"':'')+' onerror="this.style.display=\'none\'">';
+  }).join('');
+  document.getElementById('carousel-wrap').style.display='block';
+  var spd=Math.max(20,imgs.length*3);
+  document.getElementById('carousel-track').style.animationDuration=spd+'s';
+}
+
+function setP(p){
+  fPriority=p;
+  document.querySelectorAll('.ptab').forEach(function(btn){btn.classList.remove('on');});
+  var active=document.querySelector('.ptab-'+p);
+  if(active)active.classList.add('on');
+  render();
+}
+
+function render(){
+  var total=data.length;
+  var must=data.filter(function(e){return e.priority==='must';}).length;
+  var might=data.filter(function(e){return e.priority==='might';}).length;
+  var could=data.filter(function(e){return e.priority==='could';}).length;
+
+  document.getElementById('hdr-stats').innerHTML=[
+    {v:total,l:'in backlog'},{v:must,l:'must'},{v:might,l:'might'},{v:could,l:'could'}
+  ].map(function(s,i){
+    return (i?'<span style="color:#2C3A58;opacity:.4;font-size:16px;line-height:1;align-self:center">·</span>':'')
+      +'<span style="display:inline-flex;align-items:baseline;gap:4px"><span style="font-size:20px;font-weight:600;color:#0E1828;line-height:1">'+s.v+'</span><span style="font-size:12px;color:#2C3A58;line-height:1">'+s.l+'</span></span>';
+  }).join('');
+
+  var q=(document.getElementById('search').value||'').trim().toLowerCase();
+  var ftype=document.getElementById('ftype').value;
+  var srt=document.getElementById('srt').value;
+
+  var f=data.filter(function(e){
+    if(fPriority!=='all'&&e.priority!==fPriority)return false;
+    if(ftype!=='all'&&e.type!==ftype)return false;
+    if(q){
+      var hay=(e.title+' '+(e.creator||'')+' '+(e.notes||'')+' '+(e.source||'')).toLowerCase();
+      if(hay.indexOf(q)===-1)return false;
+    }
+    return true;
+  });
+
+  if(srt==='d-')f.sort(function(a,b){return b.date.localeCompare(a.date);});
+  else if(srt==='d+')f.sort(function(a,b){return a.date.localeCompare(b.date);});
+  else if(srt==='az')f.sort(function(a,b){return a.title.localeCompare(b.title);});
+  else if(srt==='p')f.sort(function(a,b){return (PORDER[a.priority]||0)-(PORDER[b.priority]||0);});
+
+  document.getElementById('cnt').textContent=f.length+' '+(f.length===1?'item':'items');
+
+  if(!f.length){
+    document.getElementById('cards').innerHTML='';
+    document.getElementById('empty').style.display='block';
+    return;
+  }
+  document.getElementById('empty').style.display='none';
+
+  if(viewMode==='list'){
+    var lh='<div class="list-view">';
+    f.forEach(function(e){
+      var c=CATS[e.type];
+      var pr=PRIORITY[e.priority]||{l:'',cls:''};
+      var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
+      var thumbInner=cachedSrc?('<img src="'+cachedSrc+'">'):(c.e);
+      lh+='<div class="list-row">'
+        +'<div class="list-thumb" style="background:'+c.bg+'">'+thumbInner+'</div>'
+        +'<div class="list-title">'+e.title+'</div>'
+        +'<div class="list-creator">'+(e.creator||'')+'</div>'
+        +'<div class="list-source">'+(e.source?'via '+e.source:'')+'</div>'
+        +'<span class="ppill '+pr.cls+'">'+pr.l+'</span>'
+        +'<div class="list-actions">'
+          +(currentUser?'<button class="icnbtn" onclick="openM(\''+e.id+'\')" style="background:#f5f4f0" title="Edit">&#9998;</button><button class="icnbtn" onclick="delE(\''+e.id+'\')" style="background:#f5f4f0" title="Remove">&times;</button>':'')+'<button class="log-btn" onclick="logIt(\''+e.id+'\')" style="margin-left:4px">Log it &rarr;</button>'
+        +'</div>'
+      +'</div>';
+    });
+    lh+='</div>';
+    document.getElementById('cards').innerHTML=lh;
+    document.getElementById('cards').style.display='block';
+    f.forEach(function(e){
+      if(imgCache[e.id]===undefined){
+        (function(en){loadImg(en,function(src){if(src){imgCache[en.id]={src:src,id:en.id};updateCarousel();render();}});})(e);
+      }
+    });
+    updateCarousel();
+    return;
+  }
+  document.getElementById('cards').style.display='';
+  var ch='';
+  f.forEach(function(e){
+    var c=CATS[e.type];
+    var pr=PRIORITY[e.priority]||{l:'',cls:''};
+    var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
+    var thumb=cachedSrc?('<img src="'+cachedSrc+'">'):'';
+    ch+='<div class="card">'
+      +'<div class="card-img" style="background:'+c.bg+'">'
+        +'<div class="card-img-inner" id="bl-'+e.id+'">'+( cached?('<img src="'+cached+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">'):c.e)+'</div>'
+      +'</div>'
+      +'<div class="card-body">'
+        +'<div class="card-top">'
+          +'<div class="card-title">'+e.title+'</div>'
+          +'<span class="ppill '+pr.cls+'">'+pr.l+'</span>'
+        +'</div>'
+        +(e.creator?'<div class="card-creator">'+e.creator+'</div>':'')
+        +(e.notes?'<div class="card-note">'+e.notes+'</div>':'')
+        +(e.source?'<div class="card-source">via '+e.source+'</div>':'')
+        +'<div class="card-footer">'
+          +'<div class="card-footer-top">'
+            +'<span class="tpill" style="background:'+c.bg+';color:'+c.tx+'">'+c.sl+'</span>'
+            +(currentUser?'<div class="card-actions"><button class="icnbtn" onclick="openM(\''+e.id+'\')" title="Edit" style="background:'+c.bg+';color:'+c.tx+'">✎</button><button class="icnbtn" onclick="delE(\''+e.id+'\')" title="Remove" style="background:'+c.bg+';color:'+c.tx+'">×</button></div>':'')
+          +'</div>'
+          +'<button class="log-btn" onclick="logIt(\''+e.id+'\')">Log it →</button>'
+        +'</div>'
+      +'</div>'
+    +'</div>';
+  });
+  document.getElementById('cards').innerHTML=ch;
+
+  f.forEach(function(e){
+    if(imgCache[e.id]===undefined){
+      (function(en){loadImg(en,function(src){if(src){imgCache[en.id]={src:src,id:en.id};applyThumb(en.id,src);updateCarousel();}});})(e);
+    }
+  });
+  updateCarousel();
+}
+</script>
+</body>
+</html>

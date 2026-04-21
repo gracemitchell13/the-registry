@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 Goals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #F2F2F0; color: #1a1a18;
+  padding: 0 0 4rem; min-height: 100vh;
+}
+.dash { max-width: 760px; margin: 0 auto; padding: 0 1rem; }
+
+/* ── New Header ── */
+.site-header {
+  background: #D8DCE8;
+  border-radius: 0;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  position: relative;
+}
+.site-header-stripe {
+  display: flex; height: 5px;
+}
+.site-header-stripe div { flex: 1; }
+.site-header-inner {
+  padding: 1.5rem 1.75rem 1.5rem;
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;
+}
+.site-header-left {}
+.site-header-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: #1A2438; margin-bottom: .3rem;
+}
+.site-header-title {
+  font-family:'Josefin Sans',sans-serif;
+  font-size: 42px; font-weight: 600; color: #1A2438; line-height: 1;
+  margin-bottom: .6rem; letter-spacing: .05em; text-transform: uppercase;
+}
+.site-header-meta { font-size: 12px; color: #4A5A80; }
+.site-header-icons {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap;
+}
+.site-header-icon {
+  font-size: 28px; opacity: .85;
+}
+
+.header { margin-bottom: 1.5rem; display: none; }
+.toolbar { display: flex; gap: 8px; margin-bottom: 1.75rem; flex-wrap: wrap; padding-top: .25rem; }
+.btn { font-size: 12px; padding: 6px 14px; border-radius: 99px; border: 0.5px solid #8A9AB8; background: #fff; color: #2C3A58; cursor: pointer; font-family: inherit; transition: background 0.12s; }
+.btn:hover { background: #f0f0ee; }
+.btn.primary { background: #D8DCE8; color: #f5f4f0; border-color: #1B3A2D; }
+.btn.primary:hover { background: #3A4A70; }
+.btn.danger { background: #FAECE7; color: #712B13; border-color: #F5C4B3; }
+.btn.danger:hover { background: #F5C4B3; }
+
+.section { margin-bottom: 1.75rem; }
+.section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 0.5px solid #C8D0E0; }
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #4A5A80; flex: 1; }
+.section-icon { font-size: 16px; margin-right: 2px; }
+
+.grid { display: grid; gap: 10px; }
+.grid-2 { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0,1fr)); }
+@media(max-width:520px){ .grid-2,.grid-3{ grid-template-columns:1fr; } }
+
+/* Cards */
+.stat-card, .progress-card, .status-card { border-radius: 12px; padding: 14px 16px; position: relative; }
+.status-card { display: flex; gap: 10px; align-items: flex-start; }
+
+.stat-card .slabel { font-size: 12px; margin-bottom: 6px; line-height: 1.4; }
+.stat-card .svalue { font-size: 26px; font-weight: 500; }
+.stat-card .ssub { font-size: 12px; margin-top: 3px; }
+
+.progress-card .top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 8px; }
+.progress-card .pname { font-size: 14px; font-weight: 500; }
+.progress-card .pfrac { font-size: 13px; white-space: nowrap; }
+.bar-track { border-radius: 99px; height: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+.card-note { font-size: 11px; margin-top: 7px; font-style: italic; opacity: 0.8; }
+
+.month-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 9px; }
+.month-chip { font-size: 10px; padding: 2px 8px; border-radius: 99px; font-weight: 500; cursor: pointer; user-select: none; }
+.month-chip:hover { opacity: 0.7; }
+
+/* Item lists */
+.item-list { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.item-row { display: flex; align-items: baseline; gap: 6px; font-size: 12px; line-height: 1.5; }
+.item-num { font-size: 10px; font-weight: 600; opacity: 0.45; min-width: 16px; flex-shrink: 0; }
+.item-text { flex: 1; }
+.item-del { opacity: 0; cursor: pointer; flex-shrink: 0; background: none; border: none; font-family: inherit; font-size: 10px; padding: 0 2px; line-height: 1; }
+.edit-mode .item-row:hover .item-del { opacity: 0.45; }
+.edit-mode .item-del:hover { opacity: 1 !important; }
+.add-item-btn { display: none; margin-top: 8px; font-size: 11px; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; opacity: 0.55; }
+.add-item-btn:hover { opacity: 1; }
+.edit-mode .add-item-btn { display: inline-block; }
+
+.status-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.status-name { font-size: 14px; font-weight: 500; }
+.status-desc { font-size: 12px; margin-top: 3px; line-height: 1.5; opacity: 0.85; }
+
+/* Edit mode */
+.card-actions { position: absolute; top: 8px; right: 8px; display: none; gap: 4px; }
+.edit-mode .card-actions { display: flex; }
+.card-actions button { font-size: 10px; padding: 2px 8px; border-radius: 99px; border: 0.5px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.75); cursor: pointer; font-family: inherit; color: #444; }
+.card-actions button:hover { background: #fff; }
+[contenteditable] { outline: none; }
+.edit-mode [contenteditable] { border-bottom: 1px dashed rgba(0,0,0,0.25); min-width: 12px; display: inline-block; cursor: text; }
+.edit-mode [contenteditable]:focus { border-bottom-color: rgba(0,0,0,0.55); }
+.edit-mode .status-dot { cursor: pointer; }
+.add-goal-row { display: none; margin-top: 8px; }
+.edit-mode .add-goal-row { display: flex; gap: 6px; }
+.add-section-row { display: none; margin-top: 4px; }
+.edit-mode .add-section-row { display: block; }
+
+/* Colors */
+
+/* ── Monochrome card styles ── */
+.gray.stat-card{background:#fff;border:0.5px solid #dddcda}
+.gray .slabel,.gray .ssub{color:#666}
+.gray .svalue{color:#1a1a18}
+
+.teal,.purple,.amber,.coral,.blue,.green{background:#fff;border:0.5px solid #dddcda}
+.teal .slabel,.teal .ssub,.teal .pfrac,.teal .card-note,.teal .item-num,.teal .add-item-btn,.teal .item-del,
+.purple .slabel,.purple .ssub,.purple .pfrac,.purple .card-note,.purple .item-num,.purple .add-item-btn,.purple .item-del,
+.amber .slabel,.amber .ssub,.amber .pfrac,.amber .card-note,.amber .item-num,.amber .add-item-btn,.amber .item-del,
+.coral .slabel,.coral .ssub,.coral .pfrac,.coral .card-note,.coral .item-num,.coral .add-item-btn,.coral .item-del,
+.blue .slabel,.blue .ssub,.blue .pfrac,.blue .card-note,.blue .item-num,.blue .add-item-btn,.blue .item-del,
+.green .slabel,.green .ssub,.green .pfrac,.green .card-note,.green .item-num,.green .add-item-btn,.green .item-del
+{color:#666}
+.teal .svalue,.teal .pname,.teal .item-text,
+.purple .svalue,.purple .pname,.purple .item-text,
+.amber .svalue,.amber .pname,.amber .item-text,
+.coral .svalue,.coral .pname,.coral .item-text,
+.blue .svalue,.blue .pname,.blue .item-text,
+.green .svalue,.green .pname,.green .item-text
+{color:#1a1a18}
+.teal .bar-track,.purple .bar-track,.amber .bar-track,.coral .bar-track,.blue .bar-track,.green .bar-track{background:#E8E8E6}
+.teal .bar-fill,.purple .bar-fill,.amber .bar-fill,.coral .bar-fill,.blue .bar-fill,.green .bar-fill{background:#4A5A80}
+/* Warn chips: jewel tone highlight */
+.teal .chip-warn,.purple .chip-warn,.amber .chip-warn{background:#C0392B;color:#fff}
+/* Done chips: dark */
+.teal .chip-done,.purple .chip-done,.amber .chip-done,.coral .chip-done,.blue .chip-done,.green .chip-done{background:#4A5A80;color:#fff}
+/* Skip chips: light */
+.teal .chip-skip,.purple .chip-skip,.amber .chip-skip,.coral .chip-skip,.blue .chip-skip,.green .chip-skip{background:#E8E8E6;color:#888;opacity:1}
+/* Status cards */
+.green.status-card,.yellow.status-card,.gray.status-card,.blue.status-card,.coral.status-card,.amber.status-card{background:#fff;border:0.5px solid #dddcda}
+.green .status-name,.yellow .status-name,.gray .status-name,.blue .status-name,.coral .status-name,.amber .status-name{color:#1a1a18}
+.green .status-desc,.yellow .status-desc,.gray .status-desc,.blue .status-desc,.coral .status-desc,.amber .status-desc{color:#666}
+/* Status dots: jewel tone by theme */
+.green .status-dot{background:#4A5A80}
+.yellow .status-dot{background:#6A7A50}
+.gray .status-dot{background:#8A9AB8}
+.blue.status-card .status-dot{background:#9B27AF}
+.coral.status-card .status-dot{background:#3B5BDB}
+.amber.status-card .status-dot{background:#C0392B}
+
+
+/* Modal */
+.modal-bg { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:1000; align-items:center; justify-content:center; }
+.modal-bg.open { display:flex; }
+.modal { background:#fff; border-radius:16px; padding:24px; width:380px; max-width:92vw; box-shadow:0 8px 32px rgba(0,0,0,0.14); }
+.modal h3 { font-size:16px; font-weight:500; margin-bottom:16px; }
+.modal label { font-size:12px; color:#5f5e5a; display:block; margin-bottom:4px; margin-top:12px; }
+.modal input,.modal select { width:100%; font-size:14px; padding:7px 10px; border:0.5px solid #ccc; border-radius:8px; font-family:inherit; color:#1a1a18; background:#fff; }
+.modal-btns { display:flex; gap:8px; margin-top:20px; justify-content:flex-end; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+<div class="dash" id="app"></div>
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h3 id="modal-title">Add goal</h3>
+    <label>Type</label>
+    <select id="m-type" onchange="modalTypeChange()">
+      <option value="list">Tracked list (books, events, trips…)</option>
+      <option value="progress">Progress bar (manual count)</option>
+      <option value="months">Monthly tracking</option>
+      <option value="status">Status</option>
+    </select>
+    <label>Label</label>
+    <input id="m-label" type="text" placeholder="Goal name">
+    <label>Color / theme</label>
+    <select id="m-color"></select>
+    <div id="m-total-field">
+      <label>Goal total</label>
+      <input id="m-total" type="number" value="12" min="1">
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="confirmModal()">Add</button>
+    </div>
+  </div>
+</div>
+
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyC9tQzabbPW07TPmGwfG-1BJKlG2-C2QY4",
+  authDomain:"media-log-14b40.firebaseapp.com",
+  projectId:"media-log-14b40",
+  storageBucket:"media-log-14b40.firebasestorage.app",
+  messagingSenderId:"1015074403444",
+  appId:"1:1015074403444:web:886eb5875911029c928d21"
+});
+var db = firebase.firestore();
+var goalsDoc = db.collection('goals').doc('data');
+
+// ── Live books from media log ─────────────────────────────────
+db.collection('entries')
+  .where('type', '==', 'book')
+  .where('status', '==', 'completed')
+  .onSnapshot(function(snap) {
+    liveBooks = [];
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      liveBooks.push({
+        label: (d.title || '') + (d.creator ? ' — ' + d.creator : '') + (d.datefinished ? ' (' + (function(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2]);} )(d.datefinished) + ')' : d.date ? ' (' + (function(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2]);} )(d.date) + ')' : ''),
+        date: d.datefinished || d.date || ''
+      });
+    });
+    liveBooks.sort(function(a,b){ return a.date.localeCompare(b.date); });
+    liveBooks = liveBooks.map(function(b){ return b.label; });
+    render();
+  }, function(err) {
+    console.warn('Could not load live books:', err);
+  });
+
+db.collection('entries')
+  .where('type', '==', 'concert')
+  .where('status', '==', 'completed')
+  .onSnapshot(function(snap) {
+    liveEvents = [];
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      liveEvents.push({
+        label: (d.title || '') + (d.creator ? ' — ' + d.creator : '') + (d.datefinished ? ' (' + (function(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2]);})(d.datefinished) + ')' : d.date ? ' (' + (function(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2]);})(d.date) + ')' : ''),
+        date: d.datefinished || d.date || ''
+      });
+    });
+    liveEvents.sort(function(a,b){ return a.date.localeCompare(b.date); });
+    liveEvents = liveEvents.map(function(e){ return e.label; });
+    render();
+  }, function(err) {
+    console.warn('Could not load live events:', err);
+  });
+
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const PROGRESS_COLORS = ["teal","purple","amber","coral","blue"];
+const STATUS_THEMES   = ["green","yellow","gray"];
+const CHIP_CYCLE  = ["skip","done","warn"];
+const THEME_CYCLE = ["green","yellow","gray"];
+const DATA_VERSION = 3;
+
+// ── default data ──────────────────────────────────────────────
+// For "list" goals, current is always computed from items.length
+// For "months" goals, current is always computed from done chips
+// For "progress" goals, current is manually set
+// Stat cards use linkedGoal {si,gi} to auto-pull numbers, or manual value/sub
+const DEFAULTS = {
+  _version: DATA_VERSION,
+  title: "2026 goals",
+  // Stat cards: set linkedGoal:{si,gi} to auto-derive numbers from a goal,
+  // or omit linkedGoal and set value/sub manually.
+  stats: [
+    { label:"books read",      color:"gray",   linkedGoal:{si:0,gi:0} },
+    { label:"events attended", color:"gray",   linkedGoal:{si:0,gi:1} },
+    { label:"trips taken",     color:"gray",   linkedGoal:{si:0,gi:2} },
+  ],
+  sections: [
+    { heading:"personal growth", goals:[
+      { type:"list", label:"Read 12+ books", total:12, color:"teal", items:[] },
+      { type:"list", label:"Attend 10 concerts / plays / events", total:10, color:"purple", items:[] },
+      { type:"list", label:"Take 5 trips", total:5, color:"amber", items:[
+          "NYC (2/6–2/8)",
+          "Puerto Rico (2/16–2/21)",
+          "Elkton, OR (3/5–3/8)",
+      ]},
+    ]},
+    { heading:"social connection", goals:[
+      { type:"months", label:"Send 12 Boxes of Joy", total:12, color:"coral",
+        note:"3 sent in January (Rayo, Sara, Afton)",
+        months: MONTHS.map((n,i)=>({name:n, status:i===0?"done":"skip"})) },
+    ]},
+    { heading:"health & wellness", columns:2, goals:[
+      { type:"status", label:"Laser hair removal", desc:"In progress — face, underarms, Brazilian + legs series started 1/13", theme:"blue" },
+      { type:"status", label:"UI treatment", desc:"Surgery scheduled for 4/30", theme:"blue" },
+    ]},
+    { heading:"ongoing habits", goals:[
+      { type:"months", label:"Buy only secondhand clothing", total:12, color:"green",
+        note:"exception: NYPL crewneck + beanie, 2/7",
+        months: MONTHS.map((n,i)=>({name:n, status:i===0?"done":i===1?"warn":"skip"})) },
+
+    ]},
+    { heading:"financial", goals:[
+      { type:"status", label:"Increase charitable giving to $300/month", desc:"Activate once employed", theme:"coral" },
+    ]},
+    { heading:"professional", goals:[
+      { type:"status", label:"Get a job", desc:"Actively searching — applications out, interviews in progress", theme:"amber" },
+    ]},
+  ]
+};
+
+// ── helpers ───────────────────────────────────────────────────
+var liveBooks = []; // pulled live from media log Firebase
+var liveEvents = []; // pulled live from media log Firebase
+
+function getCount(g) {
+  if (g.type === "list" && g.label && g.label.toLowerCase().indexOf("book") !== -1) {
+    return liveBooks.length;
+  }
+  if (g.type === "list" && g.label && (g.label.toLowerCase().indexOf("concert") !== -1 || g.label.toLowerCase().indexOf("event") !== -1 || g.label.toLowerCase().indexOf("plays") !== -1)) {
+    return liveEvents.length;
+  }
+  if (g.type === "list")   return (g.items || []).length;
+  if (g.type === "months") return (g.months || []).filter(m => m.status === "done").length;
+  return g.current || 0;
+}
+function pct(c, t) { return Math.min(100, Math.round((c / (t || 1)) * 100)); }
+
+function getAsOf() {
+  const now = new Date();
+  const mn = ["january","february","march","april","may","june","july","august","september","october","november","december"];
+  const startOfYear = new Date(now.getFullYear(), 0, 1);
+  const week = Math.ceil(((now - startOfYear) / 86400000 + startOfYear.getDay() + 1) / 7);
+  return `${mn[now.getMonth()]} ${now.getDate()}, ${now.getFullYear()} · week ${week} of 52`;
+}
+
+// ── load / migrate ────────────────────────────────────────────
+let data = JSON.parse(JSON.stringify(DEFAULTS));
+let editMode = false;
+let modalCtx = null;
+
+function save() {
+  goalsDoc.set({ _v: DATA_VERSION, payload: JSON.stringify(data) })
+    .catch(function(err){ console.error('Save error:', err); });
+}
+
+// Load from Firestore on startup
+goalsDoc.get().then(function(doc) {
+  if (doc.exists) {
+    var stored = JSON.parse(doc.data().payload || 'null');
+    if (stored && (stored._version || 1) >= DATA_VERSION) {
+      data = stored;
+    }
+  }
+  render();
+}).catch(function(err) {
+  console.error('Load error:', err);
+  render();
+});
+
+// ── inline editing ────────────────────────────────────────────
+function ce(val, path, style="") {
+  return `<span contenteditable="${editMode}" spellcheck="false" data-path="${path}"
+    ${style ? `style="${style}"` : ""} onblur="commitEdit(this)">${val}</span>`;
+}
+
+function commitEdit(el) {
+  const parts = el.dataset.path.split(".");
+  let obj = data;
+  for (let i = 0; i < parts.length - 1; i++) obj = obj[parts[i]];
+  const key = parts[parts.length - 1];
+  const raw = el.innerText.trim();
+  obj[key] = (raw !== "" && !isNaN(raw)) ? Number(raw) : raw;
+  save();
+  // update bar fill if inside a progress card
+  const card = el.closest(".progress-card");
+  if (card) {
+    const bar = card.querySelector(".bar-fill");
+    const si = parseInt(parts[1]), gi = parseInt(parts[3]);
+    const g = data.sections[si]?.goals[gi];
+    if (g && bar) bar.style.width = pct(getCount(g), g.total) + "%";
+    const frac = card.querySelector(".pfrac");
+    if (g && frac) frac.textContent = `${getCount(g)} / ${g.total}`;
+  }
+}
+
+// ── mutations ─────────────────────────────────────────────────
+function addItem(si, gi) {
+  const val = prompt("Add entry:");
+  if (!val) return;
+  data.sections[si].goals[gi].items.push(val.trim());
+  save(); render();
+}
+function deleteItem(si, gi, ii) {
+  data.sections[si].goals[gi].items.splice(ii, 1);
+  save(); render();
+}
+function cycleChip(si, gi, mi) {
+  const g = data.sections[si].goals[gi];
+  const s = g.months[mi].status;
+  g.months[mi].status = CHIP_CYCLE[(CHIP_CYCLE.indexOf(s) + 1) % 3];
+  save(); render();
+}
+function cycleTheme(si, gi) {
+  const g = data.sections[si].goals[gi];
+  g.theme = THEME_CYCLE[(THEME_CYCLE.indexOf(g.theme) + 1) % 3];
+  save(); render();
+}
+function deleteGoal(si, gi) {
+  data.sections[si].goals.splice(gi, 1);
+  save(); render();
+}
+function deleteSection(si) {
+  if (!confirm("Delete this section and all its goals?")) return;
+  data.sections.splice(si, 1);
+  save(); render();
+}
+function addSection() {
+  const name = prompt("New section name:");
+  if (!name) return;
+  data.sections.push({ heading: name.toLowerCase(), goals: [] });
+  save(); render();
+}
+
+// ── modal ─────────────────────────────────────────────────────
+function openModal(si) {
+  modalCtx = { si };
+  document.getElementById("modal-title").textContent = `Add goal — ${data.sections[si].heading}`;
+  document.getElementById("m-label").value = "";
+  document.getElementById("m-total").value = 12;
+  document.getElementById("m-type").value = "list";
+  modalTypeChange();
+  document.getElementById("modal-bg").classList.add("open");
+}
+function closeModal() { document.getElementById("modal-bg").classList.remove("open"); }
+function modalTypeChange() {
+  const t = document.getElementById("m-type").value;
+  document.getElementById("m-total-field").style.display = t === "status" ? "none" : "block";
+  const sel = document.getElementById("m-color");
+  sel.innerHTML = (t === "status" ? STATUS_THEMES : PROGRESS_COLORS)
+    .map(c => `<option value="${c}">${c}</option>`).join("");
+}
+function confirmModal() {
+  const { si } = modalCtx;
+  const type  = document.getElementById("m-type").value;
+  const label = document.getElementById("m-label").value.trim() || "New goal";
+  const color = document.getElementById("m-color").value;
+  const total = parseInt(document.getElementById("m-total").value) || 12;
+  let g;
+  if      (type === "list")     g = { type, label, total, color, items: [] };
+  else if (type === "progress") g = { type, label, total, color, current: 0, note: "" };
+  else if (type === "months")   g = { type, label, total, color, note: "", months: MONTHS.map(n => ({ name: n, status: "skip" })) };
+  else                          g = { type: "status", label, desc: "", theme: color };
+  data.sections[si].goals.push(g);
+  save(); closeModal(); render();
+}
+document.getElementById("modal-bg").addEventListener("click", e => { if (e.target === e.currentTarget) closeModal(); });
+
+// ── render ────────────────────────────────────────────────────
+function renderStat(s, i) {
+  let value, sub;
+  if (s.linkedGoal) {
+    const g = data.sections[s.linkedGoal.si]?.goals[s.linkedGoal.gi];
+    if (g) {
+      const c = getCount(g);
+      const t = g.total;
+      value = String(c);
+      sub   = `of ${t} · ${pct(c, t)}%`;
+    }
+  }
+  value = value || s.value || "—";
+  sub   = sub   || s.sub   || "";
+  return `<div class="stat-card ${s.color}">
+    <div class="slabel">${ce(s.label, `stats.${i}.label`)}</div>
+    <div class="svalue">${value}</div>
+    <div class="ssub">${sub}</div>
+  </div>`;
+}
+
+function renderList(g, si, gi) {
+  const isBooks = g.label && g.label.toLowerCase().indexOf("book") !== -1;
+  const isEvents = g.label && (g.label.toLowerCase().indexOf("concert") !== -1 || g.label.toLowerCase().indexOf("event") !== -1 || g.label.toLowerCase().indexOf("plays") !== -1);
+  const isLive = isBooks || isEvents;
+  const items = isBooks ? liveBooks : isEvents ? liveEvents : (g.items || []);
+  const c = isBooks ? liveBooks.length : isEvents ? liveEvents.length : (g.items || []).length;
+  const p = pct(c, g.total);
+  const rows = items.map((item, ii) => `
+    <div class="item-row">
+      <span class="item-num">${ii + 1}.</span>
+      <span class="item-text">${isLive ? item : ce(item, `sections.${si}.goals.${gi}.items.${ii}`)}</span>
+      ${!isLive ? `<button class="item-del" onclick="deleteItem(${si},${gi},${ii})" title="remove">✕</button>` : ''}
+    </div>`).join("");
+  const liveTag = isLive ? '<span style="font-size:10px;font-weight:600;letter-spacing:.08em;background:#2E8B57;color:#fff;border-radius:99px;padding:2px 7px;margin-left:6px;vertical-align:middle">LIVE</span>' : '';
+  return `<div class="progress-card ${g.color}">
+    <div class="card-actions"><button onclick="deleteGoal(${si},${gi})">✕ remove</button></div>
+    <div class="top">
+      <span class="pname">${ce(g.label, `sections.${si}.goals.${gi}.label`)}${liveTag}</span>
+      <span class="pfrac">${c} / ${ce(g.total, `sections.${si}.goals.${gi}.total`, "min-width:16px")}</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div>
+    <div class="item-list">${rows}</div>
+    ${!isLive ? `<button class="add-item-btn" onclick="addItem(${si},${gi})">+ add entry</button>` : '<div style="font-size:11px;color:#888;margin-top:8px;font-style:italic">Updated automatically from your media log</div>'}
+  </div>`;
+}
+
+function renderProgress(g, si, gi) {
+  const c = g.current || 0;
+  const p = pct(c, g.total);
+  return `<div class="progress-card ${g.color}">
+    <div class="card-actions"><button onclick="deleteGoal(${si},${gi})">✕ remove</button></div>
+    <div class="top">
+      <span class="pname">${ce(g.label, `sections.${si}.goals.${gi}.label`)}</span>
+      <span class="pfrac">
+        ${ce(c, `sections.${si}.goals.${gi}.current`, "min-width:16px")} / ${ce(g.total, `sections.${si}.goals.${gi}.total`, "min-width:16px")}
+      </span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div>
+    ${g.note !== undefined ? `<div class="card-note">${ce(g.note || "", `sections.${si}.goals.${gi}.note`)}</div>` : ""}
+  </div>`;
+}
+
+function renderMonths(g, si, gi) {
+  const c = getCount(g);
+  const p = pct(c, g.total);
+  const chips = g.months.map((m, mi) => {
+    const cls  = m.status === "done" ? "chip-done" : m.status === "warn" ? "chip-warn" : "chip-skip";
+    const icon = m.status === "done" ? " ✓" : m.status === "warn" ? " ⚠" : "";
+    return `<span class="month-chip ${cls}" onclick="cycleChip(${si},${gi},${mi})" title="click to toggle">${m.name}${icon}</span>`;
+  }).join("");
+  return `<div class="progress-card ${g.color}">
+    <div class="card-actions"><button onclick="deleteGoal(${si},${gi})">✕ remove</button></div>
+    <div class="top">
+      <span class="pname">${ce(g.label, `sections.${si}.goals.${gi}.label`)}</span>
+      <span class="pfrac">${c} / ${ce(g.total, `sections.${si}.goals.${gi}.total`)}</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div>
+    <div class="month-row">${chips}</div>
+    ${g.note !== undefined ? `<div class="card-note">${ce(g.note || "", `sections.${si}.goals.${gi}.note`)}</div>` : ""}
+  </div>`;
+}
+
+function renderStatus(g, si, gi) {
+  const dotAttr = editMode ? `onclick="cycleTheme(${si},${gi})" title="click to cycle"` : "";
+  return `<div class="status-card ${g.theme}">
+    <div class="card-actions"><button onclick="deleteGoal(${si},${gi})">✕ remove</button></div>
+    <div class="status-dot" ${dotAttr}></div>
+    <div style="flex:1">
+      <div class="status-name">${ce(g.label, `sections.${si}.goals.${gi}.label`)}</div>
+      <div class="status-desc">${ce(g.desc || "", `sections.${si}.goals.${gi}.desc`)}</div>
+    </div>
+  </div>`;
+}
+
+function renderGoal(g, si, gi) {
+  if (g.type === "list")     return renderList(g, si, gi);
+  if (g.type === "progress") return renderProgress(g, si, gi);
+  if (g.type === "months")   return renderMonths(g, si, gi);
+  if (g.type === "status")   return renderStatus(g, si, gi);
+  return "";
+}
+
+function renderSection(s, si) {
+  const gc = s.columns === 2 ? "grid grid-2" : "grid";
+  const delBtn = editMode ? `<button class="btn danger" style="padding:3px 10px;font-size:11px" onclick="deleteSection(${si})">✕ section</button>` : "";
+  const sectionIcons = {'personal growth':'🌱','social connection':'💌','health & wellness':'💪','ongoing habits':'🔄','financial':'💰','professional':'💼'};
+  const sIcon = sectionIcons[s.heading] || '📌';
+  const iconColors = {'personal growth':'#2E8B57','social connection':'#C0392B','health & wellness':'#9B27AF','ongoing habits':'#C9A800','financial':'#3B5BDB','professional':'#C0392B'};
+  const iconColor = iconColors[s.heading] || '#888';
+  return `<div class="section">
+    <div class="section-header">
+      <span class="section-label"><span class="section-icon">${sIcon}</span> ${ce(s.heading, `sections.${si}.heading`)}</span>
+      ${delBtn}
+    </div>
+    <div class="${gc}">${s.goals.map((g, gi) => renderGoal(g, si, gi)).join("")}</div>
+    <div class="add-goal-row"><button class="btn" onclick="openModal(${si})">+ add goal</button></div>
+  </div>`;
+}
+
+function render() {
+  const app = document.getElementById("app");
+  app.className = editMode ? "dash edit-mode" : "dash";
+  const toolbar = editMode
+    ? `<button class="btn primary" onclick="toggleEdit()">Done editing</button>
+       <button class="btn danger" onclick="resetData()">Reset to defaults</button>`
+    : `<a href="recap.html" style="font-size:12px;padding:6px 14px;border-radius:99px;border:0.5px solid #8A9AB8;color:#2C3A58;text-decoration:none;font-family:inherit">2026 Recap →</a><button class="btn" onclick="toggleEdit()" style="border-color:#8A9AB8;color:#2C3A58;font-weight:500">✎ Edit</button>`;
+  app.innerHTML = `
+    <div class="site-header">
+      <div class="site-header-stripe">
+        <div style="background:#B8C4D8"></div>
+        <div style="background:#8A9AB8"></div>
+        <div style="background:#4A5A80"></div>
+        <div style="background:#8A9AB8"></div>
+        <div style="background:#B8C4D8"></div>
+      </div>
+      <div class="site-header-inner">
+        <div class="site-header-left">
+          <div class="site-header-eyebrow">Grace Mitchell</div>
+          <div class="site-header-title">${ce(data.title, "title")}</div>
+          <div class="site-header-meta">${getAsOf()}</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="toolbar">${toolbar}</div>
+    <div class="section">
+      <div class="section-label">at a glance</div>
+      <div class="grid grid-3">${data.stats.map((s, i) => renderStat(s, i)).join("")}</div>
+    </div>
+    ${data.sections.map((s, si) => renderSection(s, si)).join("")}
+    <div class="add-section-row" style="margin-top:-8px">
+      <button class="btn" onclick="addSection()">+ add section</button>
+    </div>
+  `;
+}
+
+function toggleEdit() { editMode = !editMode; render(); }
+function resetData() {
+  if (!confirm("Reset everything to defaults? This can't be undone.")) return;
+  // reset - will be overwritten on next save
+  data = JSON.parse(JSON.stringify(DEFAULTS));
+  save(); render();
+}
+
+// render() called after Firebase load
+</script>
+</body>
+</html>

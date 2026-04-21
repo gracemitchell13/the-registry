@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Grace's 2026 in Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',system-ui,sans-serif;background:#F2F0EB;color:#1A2438;min-height:100vh}
+
+/* ── Hero ── */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;padding:2.5rem 2rem}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#2A3A54 0%,#303D58 50%,#283450 100%)}
+.hero-stripe{position:absolute;top:0;left:0;right:0;height:4px;display:flex}
+.hero-stripe div{flex:1}
+.hero-cover{position:absolute;top:0;right:0;bottom:0;width:55%;object-fit:cover;opacity:.25;mask-image:linear-gradient(to left,rgba(0,0,0,.8) 0%,transparent 100%);-webkit-mask-image:linear-gradient(to left,rgba(0,0,0,.8) 0%,transparent 100%)}
+.hero-year{font-size:clamp(80px,18vw,160px);font-weight:900;line-height:.9;color:rgba(255,255,255,.08);position:absolute;right:0;bottom:0;letter-spacing:-.05em;font-family:'Playfair Display',serif;user-select:none}
+.hero-content{position:relative;z-index:2;max-width:600px}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#8A9AB8;margin-bottom:1rem}
+.hero-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(36px,7vw,72px);font-weight:600;line-height:1.05;margin-bottom:1.25rem;letter-spacing:.05em;text-transform:uppercase}
+.hero-title em{font-style:normal;color:#8AB0D8}
+.hero-stats{display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.hero-stat-n{font-size:clamp(28px,5vw,48px);font-weight:700;line-height:1}
+.hero-stat-l{font-size:12px;color:#888;margin-top:3px}
+.hero-scroll{font-size:12px;color:#555;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.hero-scroll::after{content:'↓';font-size:16px}
+
+/* ── Layout ── */
+.page{max-width:900px;margin:0 auto;padding:4rem 1.5rem;background:#F2F0EB}
+.section{margin-bottom:5rem}
+.section-eyebrow{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#6A7898;margin-bottom:.5rem}
+.section-title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,38px);font-weight:600;line-height:1.1;margin-bottom:2rem;color:#1A2438;letter-spacing:.04em;text-transform:uppercase}
+
+/* ── Cover of the year ── */
+.coty-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center}
+.coty-img-wrap{position:relative}
+.coty-img{width:100%;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.8);display:block}
+.coty-placeholder{width:100%;padding-top:150%;border-radius:16px;background:#E8ECF5;display:flex;align-items:center;justify-content:center;font-size:80px}
+.coty-badge{position:absolute;top:-12px;right:-12px;background:#4A5A80;color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 14px;border-radius:99px}
+.coty-text .label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:.1em;margin-bottom:.4rem}
+.coty-text .title{font-family:'Josefin Sans',sans-serif;font-size:clamp(22px,3.5vw,38px);font-weight:600;line-height:1.15;margin-bottom:.5rem;letter-spacing:.03em}
+.coty-text .creator{font-size:16px;color:#8A9AB8;margin-bottom:1rem}
+.coty-text .stars{font-size:24px;color:#EF9F27;letter-spacing:2px;margin-bottom:1rem}
+.coty-text .note{font-size:15px;line-height:1.7;color:#aaa}
+
+/* ── Stat grid ── */
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.stat-card{background:#fff;border-radius:16px;padding:1.5rem;border:0.5px solid rgba(0,0,0,.08)}
+.stat-card .n{font-size:clamp(32px,5vw,52px);font-weight:700;line-height:1;margin-bottom:.4rem}
+.stat-card .l{font-size:13px;color:#8A9AB8;line-height:1.4}
+.stat-teal .n{color:#8AB8D8}
+.stat-purple .n{color:#A8B8E8}
+.stat-gold .n{color:#C8D870}
+.stat-ruby .n{color:#F0AAAA}
+.stat-sapphire .n{color:#8AAAD8}
+.stat-plum .n{color:#C8A8E8}
+
+/* ── Category breakdown ── */
+.cat-bars{display:flex;flex-direction:column;gap:1rem}
+.cat-bar-row{display:grid;grid-template-columns:80px 1fr 40px;gap:12px;align-items:center}
+.cat-bar-label{font-size:13px;color:#4A5A80;text-align:right}
+.cat-bar-track{height:10px;border-radius:99px;background:#E8ECF5;overflow:hidden}
+.cat-bar-fill{height:100%;border-radius:99px;transition:width .6s ease}
+.cat-bar-count{font-size:13px;color:#4A5A80}
+
+/* ── Monthly heatmap ── */
+.month-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.month-cell{background:#fff;border-radius:12px;padding:1rem;border:0.5px solid rgba(0,0,0,.08)}
+.month-cell .mname{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#8A9AB8;margin-bottom:.5rem}
+.month-cell .mcount{font-size:28px;font-weight:700;line-height:1;color:#1A2438}
+.month-cell .mbar{height:3px;border-radius:99px;background:#4A5A80;margin-top:.5rem;transition:width .6s}
+.month-cell.active .mname{color:#8A9AB8}
+.month-cell.best{background:#E8ECF5;border-color:#4A5A80}
+.month-cell.best .mname{color:#8AAAD8}
+
+/* ── Top shelf ── */
+.top-shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:1.5rem}
+.shelf-item{text-align:center}
+.shelf-cover{width:100%;padding-top:150%;position:relative;border-radius:10px;overflow:hidden;background:#E8ECF5;margin-bottom:.6rem}
+.shelf-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shelf-cover-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px}
+.shelf-title{font-size:12px;font-weight:500;line-height:1.3;margin-bottom:3px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#1A2438}
+.shelf-creator{font-size:11px;color:#6A7898}
+
+/* ── Rating dist ── */
+.rating-dist{display:flex;align-items:flex-end;gap:12px;height:140px;background:#F2F0EB}
+.rating-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+.rating-bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;transition:height .6s}
+.rating-n{font-size:13px;color:#aaa}
+.rating-star{font-size:12px;color:#8A9AB8}
+
+/* ── Footer ── */
+.recap-footer{text-align:center;padding:3rem 1rem 4rem;color:#8A9AB8;font-size:13px}
+.recap-footer a{color:#4A5A80;text-decoration:none}
+.recap-footer a:hover{text-decoration:underline}
+
+/* ── Loading ── */
+#loading{position:fixed;inset:0;background:#F2F0EB;display:flex;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:1rem}
+#loading .spinner{width:32px;height:32px;border:2px solid #E8ECF5;border-top-color:#4A5A80;border-radius:50%;animation:spin .8s linear infinite}
+#loading p{font-size:13px;color:#4A5A80}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:600px){
+  .hero{padding:2rem 1.25rem;min-height:85vh}
+  .page{padding:3rem 1.25rem}
+  .coty-wrap{grid-template-columns:1fr}
+  .coty-img-wrap{max-width:260px;margin:0 auto}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .month-grid{grid-template-columns:repeat(3,1fr)}
+  .cat-bar-row{grid-template-columns:70px 1fr 30px}
+  .top-shelf{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:1rem}
+}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Building your year in review...</p>
+</div>
+
+<div id="recap" style="display:none">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-stripe">
+      <div style="background:#2E8B57"></div>
+      <div style="background:#C0392B"></div>
+      <div style="background:#C9A800"></div>
+      <div style="background:#3B5BDB"></div>
+      <div style="background:#9B27AF"></div>
+    </div>
+    <img id="hero-cover-img" class="hero-cover" src="" alt="" style="display:none">
+    <div class="hero-year">2026</div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Grace Mitchell &nbsp;·&nbsp; Year in Review</div>
+      <h1 class="hero-title">A year of <em id="hero-top-cat">reading</em>,<br>watching &amp; listening.</h1>
+      <div class="hero-stats">
+        <div><div class="hero-stat-n" id="hero-total">—</div><div class="hero-stat-l">things consumed</div></div>
+        <div><div class="hero-stat-n" id="hero-completed">—</div><div class="hero-stat-l">completed</div></div>
+        <div><div class="hero-stat-n" id="hero-avg">—</div><div class="hero-stat-l">avg rating</div></div>
+      </div>
+      <div class="hero-scroll">scroll to explore</div>
+    </div>
+  </div>
+
+  <div class="page">
+
+    <!-- COVER OF THE YEAR -->
+    <div class="section" id="coty-section">
+      <div class="section-eyebrow">Standout of the year</div>
+      <div class="section-title" id="coty-section-title">Cover of the Year</div>
+      <div class="coty-wrap">
+        <div class="coty-img-wrap">
+          <div id="coty-cover" class="coty-placeholder">⭐</div>
+          <div class="coty-badge">★ 5 stars</div>
+        </div>
+        <div class="coty-text">
+          <div class="label" id="coty-type-label">Book</div>
+          <div class="title" id="coty-title">—</div>
+          <div class="creator" id="coty-creator"></div>
+          <div class="stars">★★★★★</div>
+          <div class="note" id="coty-note"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BY THE NUMBERS -->
+    <div class="section">
+      <div class="section-eyebrow">By the numbers</div>
+      <div class="section-title">The year at a glance</div>
+      <div class="stat-grid" id="stat-grid"></div>
+    </div>
+
+    <!-- CATEGORY BREAKDOWN -->
+    <div class="section">
+      <div class="section-eyebrow">What you consumed</div>
+      <div class="section-title">By category</div>
+      <div class="cat-bars" id="cat-bars"></div>
+    </div>
+
+    <!-- MONTH BY MONTH -->
+    <div class="section">
+      <div class="section-eyebrow">When you consumed it</div>
+      <div class="section-title">Month by month</div>
+      <div class="month-grid" id="month-grid"></div>
+    </div>
+
+    <!-- TOP SHELF -->
+    <div class="section" id="top-shelf-section">
+      <div class="section-eyebrow">The best of 2026</div>
+      <div class="section-title">Five-star picks</div>
+      <div class="top-shelf" id="top-shelf"></div>
+    </div>
+
+    <!-- RATINGS -->
+    <div class="section">
+      <div class="section-eyebrow">How you rated things</div>
+      <div class="section-title">Rating distribution</div>
+      <div class="rating-dist" id="rating-dist"></div>
+    </div>
+
+  </div>
+
+  <div class="recap-footer">
+    <p>Grace's 2026 Media Log &nbsp;·&nbsp; <a href="https://gracemitchell13.github.io/media-log/">View full log →</a></p>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:"AIzaSyC9tQzabbPW07TPmGwfG-1BJKlG2-C2QY4",
+  authDomain:"media-log-14b40.firebaseapp.com",
+  projectId:"media-log-14b40",
+  storageBucket:"media-log-14b40.firebasestorage.app",
+  messagingSenderId:"1015074403444",
+  appId:"1:1015074403444:web:886eb5875911029c928d21"
+});
+var db=firebase.firestore();
+
+var CATS={
+  book:   {l:'Books',   sl:'Book',   e:'📚', color:'#7EC8A0', bar:'#4A5A80'},
+  music:  {l:'Music',   sl:'Music',  e:'🎵', color:'#F0AAAA', bar:'#6A3848'},
+  tv:     {l:'TV',      sl:'TV',     e:'📺', color:'#AFA9EC', bar:'#5A6A90'},
+  movie:  {l:'Movies',  sl:'Movie',  e:'🎬', color:'#A8B8EE', bar:'#3A5878'},
+  concert:{l:'Live Events',sl:'Live Event',e:'🎸', color:'#DCA8E8', bar:'#6A5888'}
+};
+var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var RCOLORS=['#C8D0E0','#A8B8D0','#8098B8','#5A7AA0','#4A5A80'];
+
+function loadImg(e,cb){
+  if(e.imgurl){cb(e.imgurl);return;}
+  if(e.type==='book'){
+    var term=encodeURIComponent(e.title+(e.creator?' '+e.creator:''));
+    fetch('https://itunes.apple.com/search?term='+term+'&entity=ebook&limit=5')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=null;
+        if(d.results&&d.results.length){
+          for(var i=0;i<d.results.length;i++){
+            var r=d.results[i];
+            if(r.artworkUrl100&&r.trackName&&r.trackName.toLowerCase().indexOf(e.title.toLowerCase())!==-1){
+              src=r.artworkUrl100.replace('100x100bb','600x600bb');break;
+            }
+          }
+          if(!src&&d.results[0]&&d.results[0].artworkUrl100) src=d.results[0].artworkUrl100.replace('100x100bb','600x600bb');
+        }
+        cb(src);
+      }).catch(function(){cb(null);});
+  } else if(e.type==='tv'){
+    fetch('https://api.tvmaze.com/singlesearch/shows?q='+encodeURIComponent(e.title))
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=d&&d.image?(d.image.original||d.image.medium||null):null;
+        if(src) src=src.replace('http://','https://');
+        cb(src);
+      }).catch(function(){cb(null);});
+  } else if(e.type==='movie'||e.type==='music'){
+    var entity=e.type==='music'?'album':'movie';
+    var term=e.type==='music'?(e.creator+' '+e.title):e.title;
+    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(term)+'&entity='+entity+'&limit=3')
+      .then(function(r){return r.json();})
+      .then(function(d){
+        var src=d.results&&d.results[0]&&d.results[0].artworkUrl100?d.results[0].artworkUrl100.replace('100x100bb','600x600bb'):null;
+        cb(src);
+      }).catch(function(){cb(null);});
+  } else {cb(null);}
+}
+
+db.collection('entries').get().then(function(snap){
+  var data=[];
+  snap.forEach(function(doc){var d=doc.data();d.id=doc.id;data.push(d);});
+  buildRecap(data);
+  document.getElementById('loading').style.display='none';
+  document.getElementById('recap').style.display='block';
+}).catch(function(err){
+  document.getElementById('loading').innerHTML='<p style="color:#555">Could not load data.</p>';
+});
+
+function buildRecap(data){
+  var completed=data.filter(function(e){return e.status==='completed';});
+  var rated=data.filter(function(e){return e.rating>0;});
+  var avg=rated.length?(rated.reduce(function(a,e){return a+e.rating;},0)/rated.length).toFixed(1):'—';
+
+  // Hero
+  document.getElementById('hero-total').textContent=data.length;
+  document.getElementById('hero-completed').textContent=completed.length;
+  document.getElementById('hero-avg').textContent=avg;
+
+  // Top category
+  var catCounts={};
+  Object.keys(CATS).forEach(function(k){catCounts[k]=data.filter(function(e){return e.type===k;}).length;});
+  var topCat=Object.keys(catCounts).sort(function(a,b){return catCounts[b]-catCounts[a];})[0];
+  var topCatLabels={book:'reading',music:'listening',tv:'watching',movie:'watching',concert:'experiencing'};
+  document.getElementById('hero-top-cat').textContent=topCatLabels[topCat]||'consuming';
+
+  // Cover of the year — highest rated, with image
+  var fiveStars=data.filter(function(e){return e.rating===5;});
+  var coty=fiveStars.length?fiveStars[Math.floor(Math.random()*fiveStars.length)]:null;
+  if(coty){
+    var c=CATS[coty.type];
+    document.getElementById('coty-section-title').textContent=coty.title;
+    document.getElementById('coty-title').textContent=coty.title;
+    document.getElementById('coty-creator').textContent=coty.creator||'';
+    document.getElementById('coty-type-label').textContent=c.sl;
+    if(coty.notes) document.getElementById('coty-note').textContent='"'+coty.notes+'"';
+    loadImg(coty,function(src){
+      var el=document.getElementById('coty-cover');
+      if(src){
+        el.innerHTML='<img src="'+src+'" style="width:100%;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.8);display:block">';
+        el.className='coty-img-wrap';
+        // Also set hero bg cover
+        var hci=document.getElementById('hero-cover-img');
+        hci.src=src; hci.style.display='block';
+      } else {
+        el.textContent=c.e;
+      }
+    });
+  } else {
+    document.getElementById('coty-section').style.display='none';
+  }
+
+  // Stats grid
+  var fiveStarCount=data.filter(function(e){return e.rating===5;}).length;
+  var bestMonth='—';
+  var mCounts=new Array(12).fill(0);
+  data.forEach(function(e){var d=e.datefinished||e.date;if(d){var m=parseInt(d.split('-')[1])-1;if(m>=0&&m<12)mCounts[m]++;}});
+  var maxM=Math.max.apply(null,mCounts);
+  if(maxM>0) bestMonth=MONTHS[mCounts.indexOf(maxM)];
+  var inProg=data.filter(function(e){return e.status==='consuming';}).length;
+
+  var stats=[
+    {n:data.length,l:'Total logged',cl:'stat-teal'},
+    {n:completed.length,l:'Completed',cl:'stat-purple'},
+    {n:avg,l:'Avg rating',cl:'stat-gold'},
+    {n:fiveStarCount,l:'Five-star picks',cl:'stat-ruby'},
+    {n:bestMonth,l:'Most active month',cl:'stat-sapphire'},
+    {n:inProg,l:'Still in progress',cl:'stat-plum'},
+  ];
+  document.getElementById('stat-grid').innerHTML=stats.map(function(s){
+    return '<div class="stat-card '+s.cl+'"><div class="n">'+s.n+'</div><div class="l">'+s.l+'</div></div>';
+  }).join('');
+
+  // Category bars
+  var maxCat=Math.max.apply(null,Object.values(catCounts))||1;
+  document.getElementById('cat-bars').innerHTML=Object.keys(CATS).map(function(k){
+    var c=CATS[k];var cnt=catCounts[k]||0;
+    return '<div class="cat-bar-row">'
+      +'<div class="cat-bar-label">'+c.l+'</div>'
+      +'<div class="cat-bar-track"><div class="cat-bar-fill" style="width:'+Math.round(cnt/maxCat*100)+'%;background:'+c.bar+'"></div></div>'
+      +'<div class="cat-bar-count">'+cnt+'</div>'
+    +'</div>';
+  }).join('');
+
+  // Month grid
+  document.getElementById('month-grid').innerHTML=MONTHS.map(function(m,i){
+    var cnt=mCounts[i];
+    var isBest=cnt===maxM&&maxM>0;
+    var pct=maxM>0?Math.round(cnt/maxM*100):0;
+    return '<div class="month-cell'+(isBest?' best':cnt>0?' active':'')+'">'
+      +'<div class="mname">'+m+'</div>'
+      +'<div class="mcount" style="color:'+(isBest?'#1A2438':cnt>0?'#1A2438':'#ccc')+'">'+cnt+'</div>'
+      +'<div class="mbar" style="width:'+pct+'%"></div>'
+    +'</div>';
+  }).join('');
+
+  // Top shelf (5 stars)
+  var shelf=data.filter(function(e){return e.rating===5;});
+  if(shelf.length){
+    var shelfHtml=shelf.map(function(e){
+      var c=CATS[e.type];
+      return '<div class="shelf-item" id="shelf-'+e.id+'">'
+        +'<div class="shelf-cover"><div class="shelf-cover-placeholder">'+c.e+'</div></div>'
+        +'<div class="shelf-title">'+e.title+'</div>'
+        +'<div class="shelf-creator">'+( e.creator||c.sl)+'</div>'
+      +'</div>';
+    }).join('');
+    document.getElementById('top-shelf').innerHTML=shelfHtml;
+    shelf.forEach(function(e){
+      loadImg(e,function(src){
+        if(!src) return;
+        var el=document.getElementById('shelf-'+e.id);
+        if(el) el.querySelector('.shelf-cover').innerHTML='<img src="'+src+'" alt="">';
+      });
+    });
+  } else {
+    document.getElementById('top-shelf-section').style.display='none';
+  }
+
+  // Rating distribution
+  var rD=[0,0,0,0,0];
+  rated.forEach(function(e){if(e.rating>=1&&e.rating<=5)rD[e.rating-1]++;});
+  var maxR=Math.max.apply(null,rD)||1;
+  document.getElementById('rating-dist').innerHTML=rD.map(function(cnt,i){
+    var h=Math.round(cnt/maxR*120);
+    return '<div class="rating-col">'
+      +'<div class="rating-n">'+(cnt||'')+'</div>'
+      +'<div class="rating-bar" style="height:'+h+'px;background:'+RCOLORS[i]+'"></div>'
+      +'<div class="rating-star">'+(i+1)+'★</div>'
+    +'</div>';
+  }).join('');
+}
+</script>
+</body>
+</html>

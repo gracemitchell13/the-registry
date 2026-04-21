@@ -289,7 +289,7 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
     </div>
   </div>
   <div class="acrd">
-    <div style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#1A2438;margin-bottom:.85rem">Ratings</div>
+    <div style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#1A2438;margin-bottom:.85rem">Want levels</div>
     <div id="rchart" style="display:flex;align-items:flex-end;gap:4px;height:100px"></div>
   </div>
 </div>
@@ -300,7 +300,7 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
 </div>
 
 <div style="margin-bottom:.75rem">
-  <input id="search" type="text" placeholder="Search titles, authors, notes..." oninput="render()" style="width:100%;padding:8px 12px;border:0.5px solid rgba(0,0,0,.15);border-radius:8px;font-size:14px;font-family:inherit;background:#fff">
+  <input id="search" type="text" placeholder="Search items, brands, notes..." oninput="render()" style="width:100%;padding:8px 12px;border:0.5px solid rgba(0,0,0,.15);border-radius:8px;font-size:14px;font-family:inherit;background:#fff">
 </div>
 <div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:.75rem">
   <span style="font-size:13px;color:#999;margin-right:2px">Filter:</span>
@@ -313,28 +313,13 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
       <button class="view-btn on" id="vbtn-cards" onclick="setView('cards')" title="Card view">&#x229E;</button>
       <button class="view-btn" id="vbtn-list" onclick="setView('list')" title="List view">&#9776;</button>
     </div>
-    <select id="fmonth" onchange="render()" style="font-size:13px;width:auto">
-      <option value="all">All months</option>
-      <option value="01">January</option>
-      <option value="02">February</option>
-      <option value="03">March</option>
-      <option value="04">April</option>
-      <option value="05">May</option>
-      <option value="06">June</option>
-      <option value="07">July</option>
-      <option value="08">August</option>
-      <option value="09">September</option>
-      <option value="10">October</option>
-      <option value="11">November</option>
-      <option value="12">December</option>
-    </select>
     <select id="srt" onchange="render()" style="font-size:13px;width:auto">
       <option value="d-">Newest first</option>
       <option value="d+">Oldest first</option>
-      <option value="r-">Top rated</option>
+      <option value="r-">Most wanted</option>
+      <option value="p-">Price (high to low)</option>
+      <option value="p+">Price (low to high)</option>
       <option value="az">A-Z</option>
-      <option value="df-">Date finished (newest)</option>
-      <option value="df+">Date finished (oldest)</option>
     </select>
   </div>
 </div>
@@ -751,14 +736,9 @@ function render(){
   document.getElementById('stabs').innerHTML=sH;
 
   var q=(document.getElementById('search')?document.getElementById('search').value.trim().toLowerCase():'');
-  var fmonth=document.getElementById('fmonth').value;
   var f=data.filter(function(e){
     if(fType!=='all'&&e.type!==fType) return false;
     if(fStatus!=='all'&&e.status!==fStatus) return false;
-    if(fmonth!=='all'){
-      var df=e.datefinished||'';
-      if(!df||df.slice(5,7)!==fmonth) return false;
-    }
     if(q){
       var hay=(e.title+' '+(e.creator||'')+' '+(e.notes||'')).toLowerCase();
       if(hay.indexOf(q)===-1) return false;
@@ -769,8 +749,8 @@ function render(){
   if(srt==='d-') f.sort(function(a,b){return b.date.localeCompare(a.date);});
   else if(srt==='d+') f.sort(function(a,b){return a.date.localeCompare(b.date);});
   else if(srt==='r-') f.sort(function(a,b){return b.rating-a.rating;});
-  else if(srt==='df-') f.sort(function(a,b){return (b.datefinished||'').localeCompare(a.datefinished||'');});
-  else if(srt==='df+') f.sort(function(a,b){return (a.datefinished||'').localeCompare(b.datefinished||'');});
+  else if(srt==='p-') f.sort(function(a,b){var pa=typeof a.price==='number'?a.price:-1;var pb=typeof b.price==='number'?b.price:-1;return pb-pa;});
+  else if(srt==='p+') f.sort(function(a,b){var pa=typeof a.price==='number'?a.price:Infinity;var pb=typeof b.price==='number'?b.price:Infinity;return pa-pb;});
   else f.sort(function(a,b){return a.title.localeCompare(b.title);});
 
   document.getElementById('cnt').textContent=f.length+' '+(f.length===1?'entry':'entries');

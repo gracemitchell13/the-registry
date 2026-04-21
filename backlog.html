@@ -227,7 +227,7 @@ input,select,textarea{box-sizing:border-box;width:100%;padding:8px 10px;border:0
       <div id="status">Connecting...</div>
     </div>
     <div class="site-header-links">
-      <a href="index.html" style="font-size:12px;background:none;border:none;color:#4A5A80;padding:5px 0;text-decoration:none;font-family:inherit;opacity:.8">← Media Log</a>
+      <a href="index.html" style="font-size:12px;background:none;border:none;color:#4A5A80;padding:5px 0;text-decoration:none;font-family:inherit;opacity:.8">← The Registry</a>
       <button id="login-btn" onclick="signIn()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign in</button>
       <button id="logout-btn" onclick="signOut()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign out</button>
       <button id="add-btn" onclick="openM(null)" style="font-size:12px;background:#C4477A;border:none;color:#fff;font-weight:500;border-radius:6px;padding:5px 12px;display:none">+ Add</button>
@@ -287,9 +287,9 @@ input,select,textarea{box-sizing:border-box;width:100%;padding:8px 10px;border:0
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyC9tQzabbPW07TPmGwfG-1BJKlG2-C2QY4",
-  authDomain:"media-log-14b40.firebaseapp.com",
-  projectId:"media-log-14b40",
-  storageBucket:"media-log-14b40.firebasestorage.app",
+  authDomain:"the-registry-14b40.firebaseapp.com",
+  projectId:"the-registry-14b40",
+  storageBucket:"the-registry-14b40.firebasestorage.app",
   messagingSenderId:"1015074403444",
   appId:"1:1015074403444:web:886eb5875911029c928d21"
 });
@@ -613,7 +613,7 @@ function delE(id){
   col.doc(id).delete().catch(function(err){setStatus('Error: '+err.message);});
 }
 
-// ── Log it — opens media log with pre-filled URL params ──
+// ── Log it — opens The Registry with pre-filled URL params ──
 function logIt(id){
   var e=data.filter(function(x){return x.id===id;})[0];
   if(!e)return;

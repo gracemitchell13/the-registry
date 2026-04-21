@@ -260,8 +260,7 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
         <div class="hmenu-wrap">
           <button class="hmenu-btn" onclick="toggleMenu()" title="Menu">&#9776;</button>
           <div class="hmenu-dropdown" id="hmenu">
-            <a href="backlog.html" class="hmenu-item">Backlog</a>
-            <a href="recap.html" class="hmenu-item">2026 Recap →</a>
+            <a href="https://gracemitchell13.github.io/media-log/" class="hmenu-item">Media Log →</a>
           </div>
         </div>
       </div>
@@ -362,7 +361,7 @@ firebase.initializeApp({
   appId:"1:1015074403444:web:886eb5875911029c928d21"
 });
 var db=firebase.firestore();
-var col=db.collection('entries');
+var col=db.collection('registry');
 var auth=firebase.auth();
 var currentUser=null;
 
@@ -601,11 +600,6 @@ function saveE(){
   p.then(function(){
     setStatus('Saved.');
     setTimeout(function(){setStatus('');},2000);
-    if(window._backlogId){
-      firebase.firestore().collection('backlog').doc(window._backlogId).delete()
-        .catch(function(err){console.warn('Could not remove from backlog:',err);});
-      window._backlogId=null;
-    }
   }).catch(function(err){setStatus('Error: '+err.message);console.error(err);});
 }
 
@@ -909,36 +903,6 @@ function updateConsuming(){
     container.appendChild(div);
   });
 }
-</script>
-
-<script>
-// ── Handle pre-fill from backlog ──
-(function(){
-  var params=new URLSearchParams(window.location.search);
-  if(!params.get('from_backlog')) return;
-  var backlogId=params.get('from_backlog');
-  window.history.replaceState({},'',window.location.pathname);
-  var tryOpen=setInterval(function(){
-    if(!document.getElementById('ftitle')) return;
-    clearInterval(tryOpen);
-    var ftEl=document.getElementById('ft');
-    var type=params.get('type')||'book';
-    for(var i=0;i<ftEl.options.length;i++) if(ftEl.options[i].value===type){ftEl.selectedIndex=i;break;}
-    document.getElementById('ftitle').value=params.get('title')||'';
-    document.getElementById('mbox-title-display').textContent=params.get('title')||'Title';
-    document.getElementById('fcreator').value=params.get('creator')||'';
-    document.getElementById('mbox-creator-display').textContent=params.get('creator')||'';
-    document.getElementById('fnotes').value=params.get('notes')||'';
-    document.getElementById('fimgurl').value=params.get('imgurl')||'';
-    document.getElementById('fstatus').selectedIndex=2;
-    selR=0; editId=null;
-    updLbl(); updateFormTheme(); toggleDateFinished(); initStars(); paintStars(0);
-    document.getElementById('mwrap').style.display='flex';
-    window._backlogId=backlogId;
-  },300);
-})();
-
-// backlog delete handled inside saveE directly
 </script>
 </body>
 </html>

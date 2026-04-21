@@ -204,16 +204,16 @@ body {
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyC9tQzabbPW07TPmGwfG-1BJKlG2-C2QY4",
-  authDomain:"media-log-14b40.firebaseapp.com",
-  projectId:"media-log-14b40",
-  storageBucket:"media-log-14b40.firebasestorage.app",
+  authDomain:"the-registry-14b40.firebaseapp.com",
+  projectId:"the-registry-14b40",
+  storageBucket:"the-registry-14b40.firebasestorage.app",
   messagingSenderId:"1015074403444",
   appId:"1:1015074403444:web:886eb5875911029c928d21"
 });
 var db = firebase.firestore();
 var goalsDoc = db.collection('goals').doc('data');
 
-// ── Live books from media log ─────────────────────────────────
+// ── Live books from The Registry ─────────────────────────────────
 db.collection('entries')
   .where('type', '==', 'book')
   .where('status', '==', 'completed')
@@ -309,8 +309,8 @@ const DEFAULTS = {
 };
 
 // ── helpers ───────────────────────────────────────────────────
-var liveBooks = []; // pulled live from media log Firebase
-var liveEvents = []; // pulled live from media log Firebase
+var liveBooks = []; // pulled live from The Registry Firebase
+var liveEvents = []; // pulled live from The Registry Firebase
 
 function getCount(g) {
   if (g.type === "list" && g.label && g.label.toLowerCase().indexOf("book") !== -1) {
@@ -498,7 +498,7 @@ function renderList(g, si, gi) {
     </div>
     <div class="bar-track"><div class="bar-fill" style="width:${p}%"></div></div>
     <div class="item-list">${rows}</div>
-    ${!isLive ? `<button class="add-item-btn" onclick="addItem(${si},${gi})">+ add entry</button>` : '<div style="font-size:11px;color:#888;margin-top:8px;font-style:italic">Updated automatically from your media log</div>'}
+    ${!isLive ? `<button class="add-item-btn" onclick="addItem(${si},${gi})">+ add entry</button>` : '<div style="font-size:11px;color:#888;margin-top:8px;font-style:italic">Updated automatically from your The Registry</div>'}
   </div>`;
 }
 

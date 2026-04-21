@@ -164,53 +164,65 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
 <div id="mwrap" class="mwrap">
   <div class="mbox">
     <div class="mbox-header" id="mbox-header">
-      <div class="mbox-cover" id="mbox-cover">📚</div>
+      <div class="mbox-cover" id="mbox-cover">👗</div>
       <div class="mbox-header-text">
-        <div class="mbox-title-label" id="mbox-type-label">Book</div>
-        <div class="mbox-title-display" id="mbox-title-display">Title</div>
+        <div class="mbox-title-label" id="mbox-type-label">Apparel</div>
+        <div class="mbox-title-display" id="mbox-title-display">Item</div>
         <div class="mbox-creator-display" id="mbox-creator-display"></div>
       </div>
       <button class="mbox-close" onclick="closeM()">&times;</button>
     </div>
     <div class="mbox-body">
       <div>
-        <label class="mbox-label">Type</label>
+        <label class="mbox-label">Category</label>
         <select id="ft" onchange="updLbl();updateFormTheme()">
-          <option value="book">Book</option>
-          <option value="music">Music / album</option>
-          <option value="tv">TV show</option>
-          <option value="movie">Movie</option>
-          <option value="concert">Live Event</option>
+          <option value="apparel">Apparel</option>
+          <option value="home">Home</option>
+          <option value="beauty">Beauty &amp; Body</option>
+          <option value="kitchen">Kitchen</option>
+          <option value="jewelry">Jewelry</option>
+          <option value="paper">Books &amp; Paper</option>
+          <option value="other">Other</option>
         </select>
       </div>
       <div>
-        <label class="mbox-label">Title</label>
-        <input id="ftitle" type="text" placeholder="Title..." oninput="updateFormPreview()">
+        <label class="mbox-label">Item</label>
+        <input id="ftitle" type="text" placeholder="What is it..." oninput="updateFormPreview()">
         <div id="terr" style="font-size:13px;color:#c00;margin-top:3px;display:none">Required.</div>
       </div>
       <div>
-        <label class="mbox-label" id="clbl">Author</label>
+        <label class="mbox-label" id="clbl">Brand</label>
         <input id="fcreator" type="text" oninput="updateFormPreview()">
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1">
+          <label class="mbox-label">Price <span style="font-weight:400;opacity:.6">(USD)</span></label>
+          <input id="fprice" type="number" step="0.01" min="0" placeholder="0">
+        </div>
+        <div style="flex:2">
+          <label class="mbox-label">Link <span style="font-weight:400;opacity:.6">(optional)</span></label>
+          <input id="furl" type="url" placeholder="https://...">
+        </div>
       </div>
       <div>
         <label class="mbox-label">Status</label>
         <select id="fstatus" onchange="toggleDateFinished()">
-          <option value="consuming">Currently consuming</option>
-          <option value="backlog">Backlog / want to</option>
-          <option value="completed">Completed</option>
-          <option value="dnf">Did not finish</option>
+          <option value="wanted">Wanted</option>
+          <option value="purchased">Purchased</option>
+          <option value="gifted">Gifted</option>
+          <option value="archived">Archived</option>
         </select>
       </div>
       <div id="date-finished-field" style="display:none">
-        <label class="mbox-label">Date finished</label>
+        <label class="mbox-label">Date acquired</label>
         <input id="fdatefinished" type="date">
       </div>
       <div>
-        <label class="mbox-label">Rating</label>
+        <label class="mbox-label">Want level</label>
         <div id="si" style="display:flex;gap:2px"></div>
       </div>
       <div>
-        <label class="mbox-label">Notes</label>
+        <label class="mbox-label">Notes <span style="font-weight:400;opacity:.6">(size, color, etc.)</span></label>
         <textarea id="fnotes" rows="2" style="resize:vertical"></textarea>
       </div>
       <div>
@@ -236,8 +248,8 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
   <div style="padding:1.4rem 1.5rem .75rem;position:relative">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
       <div>
-        <div style="font-size:12px;font-weight:500;letter-spacing:.12em;color:#1A2438;text-transform:uppercase;margin-bottom:.2rem">Grace's</div>
-        <div style="font-family:'Josefin Sans',sans-serif;font-size:38px;font-weight:600;color:#1A2438;line-height:1;margin-bottom:.8rem;letter-spacing:.05em;text-transform:uppercase">2026 The Registry</div>
+        <div style="font-size:12px;font-weight:500;letter-spacing:.12em;color:#1A2438;text-transform:uppercase;margin-bottom:.2rem">Things I want but am resisting</div>
+        <div style="font-family:'Josefin Sans',sans-serif;font-size:38px;font-weight:600;color:#1A2438;line-height:1;margin-bottom:.8rem;letter-spacing:.05em;text-transform:uppercase">The Registry</div>
         <div id="hdr-stats" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
         <div id="status">Connecting...</div>
       </div>
@@ -271,10 +283,10 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
     <div style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#1A2438;margin-bottom:.85rem">By category</div>
     <div id="cchart"></div>
     <div style="display:flex;gap:12px;margin-top:.75rem;flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#4A5A80;display:inline-block"></span>Done</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#6A7898;display:inline-block"></span>Now</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#D8D6CC;display:inline-block"></span>Backlog</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#C4477A;display:inline-block"></span>DNF</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#2C3A58;display:inline-block"></span>Wanted</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#3B6D11;display:inline-block"></span>Purchased</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#7F77DD;display:inline-block"></span>Gifted</span>
+      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#888780;display:inline-block"></span>Archived</span>
     </div>
   </div>
   <div class="acrd">
@@ -284,7 +296,7 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
 </div>
 
 <div class="acrd" style="margin-bottom:1.5rem">
-  <div style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#1A2438;margin-bottom:.75rem">Top Picks</div>
+  <div style="font-family:'Josefin Sans',sans-serif;font-size:18px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#1A2438;margin-bottom:.75rem">Most Wanted</div>
   <div id="tops"></div>
 </div>
 
@@ -380,17 +392,19 @@ function signOut(){
 }
 
 var CATS={
-  book:    {l:'Books',    sl:'Book',    e:'📚',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',dot:'#4A5A80',cl:'Author'},
-  music:   {l:'Music',   sl:'Music',   e:'🎵',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',dot:'#4A5A80',cl:'Artist'},
-  tv:      {l:'TV',      sl:'TV show', e:'📺',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',dot:'#4A5A80',cl:'Creator'},
-  movie:   {l:'Movies',  sl:'Movie',   e:'🎬',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',dot:'#4A5A80',cl:'Director'},
-  concert: {l:'Live Events',sl:'Live Event', e:'🎸',bg:'#EEECEA',hd:'#4A5A80',tx:'#2C2C2A',dot:'#4A5A80',cl:'Venue'}
+  apparel: {l:'Apparel',       sl:'Apparel',  e:'👗',bg:'#F5E6EC',hd:'#993556',tx:'#2C2C2A',dot:'#D4537E',cl:'Brand'},
+  home:    {l:'Home',          sl:'Home',     e:'🏠',bg:'#EAF3DE',hd:'#3B6D11',tx:'#2C2C2A',dot:'#639922',cl:'Brand'},
+  beauty:  {l:'Beauty & Body', sl:'Beauty',   e:'🌿',bg:'#E1F5EE',hd:'#0F6E56',tx:'#2C2C2A',dot:'#1D9E75',cl:'Brand'},
+  kitchen: {l:'Kitchen',       sl:'Kitchen',  e:'🍋',bg:'#FAEEDA',hd:'#854F0B',tx:'#2C2C2A',dot:'#BA7517',cl:'Brand'},
+  jewelry: {l:'Jewelry',       sl:'Jewelry',  e:'💍',bg:'#EEEDFE',hd:'#3C3489',tx:'#2C2C2A',dot:'#7F77DD',cl:'Brand'},
+  paper:   {l:'Books & Paper', sl:'Paper',    e:'📖',bg:'#FBEAF0',hd:'#72243E',tx:'#2C2C2A',dot:'#D4537E',cl:'Author / Brand'},
+  other:   {l:'Other',         sl:'Other',    e:'✨',bg:'#F1EFE8',hd:'#444441',tx:'#2C2C2A',dot:'#888780',cl:'Brand'}
 };
 var SM={
-  consuming:{l:'In progress',bg:'#2C3A58',tx:'#fff'},
-  backlog:  {l:'Backlog',    bg:'#888780',tx:'#fff'},
-  completed:{l:'Completed',  bg:'#2C3A5A',tx:'#fff'},
-  dnf:      {l:'DNF',        bg:'#C4477A',tx:'#fff'}
+  wanted:    {l:'Wanted',    bg:'#2C3A58',tx:'#fff'},
+  purchased: {l:'Purchased', bg:'#3B6D11',tx:'#fff'},
+  gifted:    {l:'Gifted',    bg:'#7F77DD',tx:'#fff'},
+  archived:  {l:'Archived',  bg:'#888780',tx:'#fff'}
 };
 
 var data=[],selR=0,fType='all',fStatus='all',editId=null,imgCache={};
@@ -406,52 +420,7 @@ col.orderBy('date','desc').onSnapshot(function(snap){
 function loadImg(e,cb){
   if(imgCache[e.id]!==undefined){cb(imgCache[e.id]);return;}
   if(e.imgurl){imgCache[e.id]=e.imgurl;cb(e.imgurl);return;}
-  if(e.type==='book'){
-    var term=encodeURIComponent(e.title+(e.creator?' '+e.creator:''));
-    fetch('https://itunes.apple.com/search?term='+term+'&entity=ebook&limit=5')
-      .then(function(r){return r.json();})
-      .then(function(d){
-        var src=null;
-        if(d.results&&d.results.length){
-          for(var i=0;i<d.results.length;i++){
-            var r=d.results[i];
-            if(r.artworkUrl100&&r.trackName&&r.trackName.toLowerCase().indexOf(e.title.toLowerCase())!==-1){
-              src=r.artworkUrl100.replace('100x100bb','600x600bb');
-              break;
-            }
-          }
-          if(!src&&d.results[0]&&d.results[0].artworkUrl100){
-            src=d.results[0].artworkUrl100.replace('100x100bb','600x600bb');
-          }
-        }
-        imgCache[e.id]=src;cb(src);
-      }).catch(function(){imgCache[e.id]=null;cb(null);});
-  } else if(e.type==='tv'){
-    fetch('https://api.tvmaze.com/singlesearch/shows?q='+encodeURIComponent(e.title))
-      .then(function(r){return r.json();})
-      .then(function(d){
-        var src=null;
-        if(d&&d.image){
-          src=(d.image.original||d.image.medium||null);
-          if(src) src=src.replace('http://','https://');
-        }
-        imgCache[e.id]=src;cb(src);
-      }).catch(function(){imgCache[e.id]=null;cb(null);});
-  } else if(e.type==='movie'||e.type==='music'){
-    var entity=e.type==='music'?'album':'movie';
-    var term=e.type==='music'?(e.creator+' '+e.title):e.title;
-    fetch('https://itunes.apple.com/search?term='+encodeURIComponent(term)+'&entity='+entity+'&limit=3')
-      .then(function(r){return r.json();})
-      .then(function(d){
-        var src=null;
-        if(d.results&&d.results[0]&&d.results[0].artworkUrl100){
-          src=d.results[0].artworkUrl100.replace('100x100bb','600x600bb');
-        }
-        imgCache[e.id]=src;cb(src);
-      }).catch(function(){imgCache[e.id]=null;cb(null);});
-  } else {
-    imgCache[e.id]=null;cb(null);
-  }
+  imgCache[e.id]=null;cb(null);
 }
 
 function applyThumb(id,src){
@@ -521,8 +490,8 @@ function updateFormPreview(){
 function toggleDateFinished(){
   var status=document.getElementById('fstatus').value;
   var field=document.getElementById('date-finished-field');
-  field.style.display=(status==='completed'||status==='dnf')?'block':'none';
-  if(status==='completed'&&!document.getElementById('fdatefinished').value){
+  field.style.display=(status==='purchased'||status==='gifted')?'block':'none';
+  if((status==='purchased'||status==='gifted')&&!document.getElementById('fdatefinished').value){
     document.getElementById('fdatefinished').value=new Date().toISOString().slice(0,10);
   }
 }
@@ -567,6 +536,8 @@ function openM(id){
     document.getElementById('mbox-title-display').textContent=e.title;
     document.getElementById('fcreator').value=e.creator||'';
     document.getElementById('mbox-creator-display').textContent=e.creator||'';
+    document.getElementById('fprice').value=(e.price!==undefined&&e.price!==null)?e.price:'';
+    document.getElementById('furl').value=e.url||'';
     document.getElementById('fnotes').value=e.notes||'';
     document.getElementById('fimgurl').value=e.imgurl||'';
     var formCover=document.getElementById('mbox-cover');
@@ -585,10 +556,12 @@ function openM(id){
   } else {
     document.getElementById('ftitle').value='';
     document.getElementById('fcreator').value='';
+    document.getElementById('fprice').value='';
+    document.getElementById('furl').value='';
     document.getElementById('fnotes').value='';
     document.getElementById('fimgurl').value='';
     document.getElementById('mbox-cover').innerHTML=CATS[document.getElementById('ft').value].e;
-    document.getElementById('mbox-title-display').textContent='Title';
+    document.getElementById('mbox-title-display').textContent='Item';
     document.getElementById('mbox-creator-display').textContent='';
     document.getElementById('fdatefinished').value='';
     document.getElementById('ft').selectedIndex=0;
@@ -608,10 +581,13 @@ function saveE(){
   if(!title){document.getElementById('terr').style.display='block';return;}
   var savedRating=selR;
   var savedEditId=editId;
+  var priceVal=document.getElementById('fprice').value;
   var entry={
     type:document.getElementById('ft').value,
     title:title,
     creator:document.getElementById('fcreator').value.trim(),
+    price:priceVal===''?null:parseFloat(priceVal),
+    url:document.getElementById('furl').value.trim(),
     status:document.getElementById('fstatus').value,
     rating:savedRating,
     notes:document.getElementById('fnotes').value.trim(),
@@ -681,12 +657,13 @@ function setSF(s){fStatus=s;render();}
 
 function render(){
   var total=data.length;
-  var done=data.filter(function(e){return e.status==='completed';}).length;
-  var now=data.filter(function(e){return e.status==='consuming';}).length;
-  var rated=data.filter(function(e){return e.rating>0;});
-  var avg=rated.length?(rated.reduce(function(a,e){return a+e.rating;},0)/rated.length).toFixed(1):'—';
+  var wanted=data.filter(function(e){return e.status==='wanted';}).length;
+  var got=data.filter(function(e){return e.status==='purchased'||e.status==='gifted';}).length;
+  var totalVal=data.filter(function(e){return e.status==='wanted'&&typeof e.price==='number';})
+    .reduce(function(a,e){return a+e.price;},0);
+  var valDisplay=totalVal>0?('$'+Math.round(totalVal).toLocaleString()):'—';
   document.getElementById('hdr-stats').innerHTML=[
-    {v:total,l:'logged'},{v:done,l:'completed'},{v:now,l:'in progress'},{v:avg,l:'avg rating'}
+    {v:total,l:'items'},{v:wanted,l:'wanted'},{v:got,l:'acquired'},{v:valDisplay,l:'wishlist value'}
   ].map(function(s,i){
     return (i?'<span style="color:#4A5A80;opacity:.5;font-size:13px">·</span>':'')
       +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:20px;font-weight:500;color:#1A2438;line-height:1">'+s.v+'</span><span style="font-size:12px;color:#4A5A80">'+s.l+'</span></div>';
@@ -695,24 +672,22 @@ function render(){
   var ks=Object.keys(CATS);var tH='';
   ks.forEach(function(k){
     var c=CATS[k];var it=data.filter(function(e){return e.type===k;});
-    var dn=it.filter(function(e){return e.status==='completed';}).length;
-    var nw=it.filter(function(e){return e.status==='consuming';}).length;
-    var bl=it.filter(function(e){return e.status==='backlog';}).length;
-    var df=it.filter(function(e){return e.status==='dnf';}).length;
-    var rt=it.filter(function(e){return e.rating>0;});
-    var a2=rt.length?(rt.reduce(function(a,e){return a+e.rating;},0)/rt.length).toFixed(1):'—';
+    var wt=it.filter(function(e){return e.status==='wanted';}).length;
+    var pu=it.filter(function(e){return e.status==='purchased';}).length;
+    var gf=it.filter(function(e){return e.status==='gifted';}).length;
+    var ar=it.filter(function(e){return e.status==='archived';}).length;
     var tot=it.length||1;var sel=fType===k;
     tH+='<div class="cat-tile'+(sel?' sel':'')+'" onclick="setTF(\''+(sel?'all':k)+'\')" style="background:'+c.bg+';border-color:'+(sel?c.dot:'transparent')+'">'
       +'<div style="font-size:20px;line-height:1;margin-bottom:4px">'+c.e+'</div>'
       +'<div style="font-size:12px;font-weight:500;color:'+c.tx+';margin-bottom:1px">'+c.l+'</div>'
       +'<div style="font-size:24px;font-weight:500;color:'+c.hd+'">'+it.length+'</div>'
       +'<div style="height:5px;border-radius:3px;overflow:hidden;background:rgba(0,0,0,.08);display:flex;margin-top:5px">'
-        +'<div style="width:'+Math.round(dn/tot*100)+'%;height:100%;background:'+c.dot+'"></div>'
-        +'<div style="width:'+Math.round(nw/tot*100)+'%;height:100%;background:'+c.hd+';opacity:.6"></div>'
-        +'<div style="width:'+Math.round(bl/tot*100)+'%;height:100%;background:'+c.hd+';opacity:.25"></div>'
-        +'<div style="width:'+Math.round(df/tot*100)+'%;height:100%;background:#C4477A;opacity:.7"></div>'
+        +'<div style="width:'+Math.round(wt/tot*100)+'%;height:100%;background:'+c.hd+'"></div>'
+        +'<div style="width:'+Math.round(pu/tot*100)+'%;height:100%;background:'+c.dot+'"></div>'
+        +'<div style="width:'+Math.round(gf/tot*100)+'%;height:100%;background:'+c.dot+';opacity:.5"></div>'
+        +'<div style="width:'+Math.round(ar/tot*100)+'%;height:100%;background:#888780;opacity:.4"></div>'
       +'</div>'
-      +'<div style="font-size:11px;color:'+c.tx+';opacity:.75;margin-top:4px">'+(a2!=='—'?'★ '+a2+' · ':'')+dn+' done</div>'
+      +'<div style="font-size:11px;color:'+c.tx+';opacity:.75;margin-top:4px">'+wt+' wanted · '+(pu+gf)+' got</div>'
     +'</div>';
   });
   document.getElementById('tiles').innerHTML=tH;
@@ -722,17 +697,17 @@ function render(){
   var cH='';
   ks.forEach(function(k){
     var c=CATS[k];
-    var dn=data.filter(function(e){return e.type===k&&e.status==='completed';}).length;
-    var nw=data.filter(function(e){return e.type===k&&e.status==='consuming';}).length;
-    var bl=data.filter(function(e){return e.type===k&&e.status==='backlog';}).length;
-    var df=data.filter(function(e){return e.type===k&&e.status==='dnf';}).length;
-    var tot=dn+nw+bl+df;
-    cH+='<div class="brow"><div style="width:62px;font-size:13px;color:#666;text-align:right;flex-shrink:0">'+c.l+'</div>'
+    var wt=data.filter(function(e){return e.type===k&&e.status==='wanted';}).length;
+    var pu=data.filter(function(e){return e.type===k&&e.status==='purchased';}).length;
+    var gf=data.filter(function(e){return e.type===k&&e.status==='gifted';}).length;
+    var ar=data.filter(function(e){return e.type===k&&e.status==='archived';}).length;
+    var tot=wt+pu+gf+ar;
+    cH+='<div class="brow"><div style="width:82px;font-size:13px;color:#666;text-align:right;flex-shrink:0">'+c.l+'</div>'
       +'<div class="btrack">'
-        +'<div style="width:'+Math.round(dn/maxC*100)+'%;height:100%;background:#4A5A80"></div>'
-        +'<div style="width:'+Math.round(nw/maxC*100)+'%;height:100%;background:#4A5A80"></div>'
-        +'<div style="width:'+Math.round(bl/maxC*100)+'%;height:100%;background:#D8D6CC"></div>'
-        +'<div style="width:'+Math.round(df/maxC*100)+'%;height:100%;background:#C4477A;opacity:.8"></div>'
+        +'<div style="width:'+Math.round(wt/maxC*100)+'%;height:100%;background:#2C3A58"></div>'
+        +'<div style="width:'+Math.round(pu/maxC*100)+'%;height:100%;background:#3B6D11"></div>'
+        +'<div style="width:'+Math.round(gf/maxC*100)+'%;height:100%;background:#7F77DD"></div>'
+        +'<div style="width:'+Math.round(ar/maxC*100)+'%;height:100%;background:#888780;opacity:.6"></div>'
       +'</div>'
       +'<div style="width:22px;font-size:13px;color:#666">'+tot+'</div></div>';
   });
@@ -754,7 +729,7 @@ function render(){
   });
   document.getElementById('rchart').innerHTML=rH;
 
-  var tops=data.filter(function(e){return e.rating>=5;})
+  var tops=data.filter(function(e){return e.rating>=5&&e.status==='wanted';})
     .sort(function(a,b){return b.date.localeCompare(a.date);})
     .slice(0,10);
   if(tops.length){
@@ -770,11 +745,11 @@ function render(){
     tpH+='</div>';
     document.getElementById('tops').innerHTML=tpH;
   } else {
-    document.getElementById('tops').innerHTML='<div style="font-size:14px;color:#999">Rate something 5 stars to see it here.</div>';
+    document.getElementById('tops').innerHTML='<div style="font-size:14px;color:#999">Mark something 5 stars to see it here.</div>';
   }
 
   var sH='';
-  [['all','All'],['consuming','In progress'],['backlog','Backlog'],['completed','Done'],['dnf','DNF']].forEach(function(p){
+  [['all','All'],['wanted','Wanted'],['purchased','Purchased'],['gifted','Gifted'],['archived','Archived']].forEach(function(p){
     var on=fStatus===p[0];
     var bg=on?(p[0]==='all'?'#4A5A80':SM[p[0]].bg):'transparent';
     sH+='<button class="tbtn'+(on?' on':'')+'" onclick="setSF(\''+p[0]+'\')" style="background:'+bg+';color:'+(on?'#fff':'#555')+'">'+p[1]+'</button>';
@@ -815,11 +790,14 @@ function render(){
       var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
       var thumbInner=cachedSrc?('<img src="'+cachedSrc+'">'):(c.e);
       var stars=e.rating?(('\u2605').repeat(e.rating)+('\u2606').repeat(5-e.rating)):'\u2014';
+      var priceStr=(typeof e.price==='number')?('$'+Math.round(e.price)):'';
+      var titleHTML=e.url?('<a href="'+e.url+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+e.title+' <span style="color:#999;font-size:11px">↗</span></a>'):e.title;
       lh+='<div class="list-row">'
         +'<div class="list-thumb" style="background:'+c.bg+'">'+thumbInner+'</div>'
-        +'<div class="list-title">'+e.title+'</div>'
+        +'<div class="list-title">'+titleHTML+'</div>'
         +'<div class="list-creator">'+(e.creator||'')+'</div>'
         +'<div class="list-rating">'+stars+'</div>'
+        +'<div style="font-size:13px;color:#444;width:60px;text-align:right;flex-shrink:0">'+priceStr+'</div>'
         +'<span class="pill list-status" style="background:'+s.bg+';color:'+s.tx+'">'+s.l+'</span>'
         +'<div class="list-actions">'
           +(currentUser?'<button class="icnbtn" onclick="openM(\''+e.id+'\')" style="background:#f5f4f0" title="Edit">&#9998;</button><button class="icnbtn" onclick="delE(\''+e.id+'\')" style="background:#f5f4f0" title="Remove">&times;</button>':'')
@@ -840,22 +818,25 @@ function render(){
   var ch='';
   f.forEach(function(e){
     var c=CATS[e.type],s=SM[e.status];
-    var dnfS=e.status==='dnf'?'repeating-linear-gradient(45deg,transparent,transparent 4px,rgba(196,71,122,.12) 4px,rgba(196,71,122,.12) 8px)':'';
+    var archivedS=e.status==='archived'?';opacity:.55':'';
     var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
     var ti=cachedSrc?'<img class="cthumb" src="'+cachedSrc+'" onerror="this.style.display=\'none\'">':'<span style="font-size:34px">'+c.e+'</span>';
-    ch+='<div class="sc">'
-      +'<div style="width:100%;padding-top:160%;position:relative;background:'+c.bg+(dnfS?';background-image:'+dnfS:'')+'">'
+    var priceStr=(typeof e.price==='number')?('$'+Math.round(e.price)):'';
+    var titleHTML=e.url?('<a href="'+e.url+'" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">'+e.title+'</a>'):e.title;
+    ch+='<div class="sc" style="'+(archivedS?archivedS.substring(1):'')+'">'
+      +'<div style="width:100%;padding-top:160%;position:relative;background:'+c.bg+'">'
         +'<div id="th-'+e.id+'" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden">'+ti+'</div>'
         +'<div style="position:absolute;top:6px;left:6px"><span class="pill" style="background:'+c.bg+';color:'+c.tx+'">'+c.sl+'</span></div>'
+        +(priceStr?'<div style="position:absolute;bottom:6px;left:6px"><span class="pill" style="background:rgba(255,255,255,.92);color:#1a1a18;font-weight:500">'+priceStr+'</span></div>':'')
         +'<div style="position:absolute;top:5px;right:5px;display:flex;gap:3px">'
           +(currentUser?'<button class="icnbtn" onclick="openM(\''+e.id+'\')" style="background:'+c.bg+';color:'+c.tx+'" title="Edit">✎</button><button class="icnbtn" onclick="delE(\''+e.id+'\')" style="background:'+c.bg+';color:'+c.tx+'" title="Remove">×</button>':'')
         +'</div>'
       +'</div>'
       +'<div style="padding:.75rem">'
-        +'<div style="font-size:15px;font-weight:500;color:#1a1a18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3">'+e.title+'</div>'
+        +'<div style="font-size:15px;font-weight:500;color:#1a1a18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3">'+titleHTML+'</div>'
         +(e.creator?'<div style="font-size:13px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px">'+e.creator+'</div>':'')
         +'<div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:3px">'
-          +(e.rating?'<div>'+st(e.rating,12)+'</div>':'<div style="font-size:12px;color:#aaa">unrated</div>')
+          +(e.rating?'<div>'+st(e.rating,12)+'</div>':'<div style="font-size:12px;color:#aaa">—</div>')
           +'<span class="pill" style="background:'+s.bg+';color:'+s.tx+'">'+s.l+'</span>'
         +'</div>'
         +(e.datefinished?'<div style="font-size:11px;color:#aaa;margin-top:4px">✓ '+(function(s){var p=s.split('-');return parseInt(p[1])+'/'+parseInt(p[2]);})(e.datefinished)+'</div>':'')

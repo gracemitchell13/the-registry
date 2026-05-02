@@ -251,18 +251,13 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
         <div style="font-size:12px;font-weight:500;letter-spacing:.12em;color:#1A2438;text-transform:uppercase;margin-bottom:.2rem">Things I want but am resisting</div>
         <div style="font-family:'Josefin Sans',sans-serif;font-size:38px;font-weight:600;color:#1A2438;line-height:1;margin-bottom:.8rem;letter-spacing:.05em;text-transform:uppercase">The Registry</div>
         <div id="hdr-stats" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
+        <div id="resist-stats" style="display:none;margin-top:.55rem"></div>
         <div id="status">Connecting...</div>
       </div>
       <div style="display:flex;gap:8px;padding-top:4px">
         <button id="login-btn" onclick="signIn()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign in</button>
       <button id="logout-btn" onclick="signOut()" style="font-size:12px;background:none;border:0.5px solid #6A7898;color:#2C3A58;font-weight:500;border-radius:6px;padding:5px 12px;display:none">Sign out</button>
       <button id="add-btn" onclick="openM(null)" style="font-size:12px;background:#C4477A;border:none;color:#fff;font-weight:500;border-radius:6px;padding:5px 12px;display:none">+ Add</button>
-        <div class="hmenu-wrap">
-          <button class="hmenu-btn" onclick="toggleMenu()" title="Menu">&#9776;</button>
-          <div class="hmenu-dropdown" id="hmenu">
-            <a href="https://gracemitchell13.github.io/media-log/" class="hmenu-item">Media Log →</a>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -625,12 +620,6 @@ function setView(v){
   document.getElementById('vbtn-list').classList.toggle('on',v==='list');
   render();
 }
-function toggleMenu(){
-  document.getElementById('hmenu').classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  if(!e.target.closest('.hmenu-wrap')) document.getElementById('hmenu').classList.remove('open');
-});
 function setTF(t){fType=t;render();}
 function setSF(s){fStatus=s;render();}
 
@@ -647,6 +636,24 @@ function render(){
     return (i?'<span style="color:#4A5A80;opacity:.5;font-size:13px">·</span>':'')
       +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:20px;font-weight:500;color:#1A2438;line-height:1">'+s.v+'</span><span style="font-size:12px;color:#4A5A80">'+s.l+'</span></div>';
   }).join('');
+
+  // Resistance stats: archived items count + sum of their prices
+  var archived=data.filter(function(e){return e.status==='archived';});
+  var resistEl=document.getElementById('resist-stats');
+  if(archived.length){
+    var resistedVal=archived.filter(function(e){return typeof e.price==='number';})
+      .reduce(function(a,e){return a+e.price;},0);
+    var resistedDisplay=resistedVal>0?('$'+Math.round(resistedVal).toLocaleString()):'—';
+    resistEl.innerHTML='<div style="display:inline-flex;gap:10px;flex-wrap:wrap;align-items:center;padding:.45rem .8rem;background:rgba(196,71,122,.08);border:0.5px solid rgba(196,71,122,.22);border-radius:8px">'
+      +'<span style="font-size:10px;font-weight:600;letter-spacing:.12em;color:#993556;text-transform:uppercase">Resisted</span>'
+      +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:18px;font-weight:500;color:#1A2438;line-height:1">'+archived.length+'</span><span style="font-size:12px;color:#4A5A80">items</span></div>'
+      +'<span style="color:#4A5A80;opacity:.5;font-size:13px">·</span>'
+      +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:18px;font-weight:500;color:#1A2438;line-height:1">'+resistedDisplay+'</span><span style="font-size:12px;color:#4A5A80">not spent</span></div>'
+    +'</div>';
+    resistEl.style.display='block';
+  } else {
+    resistEl.style.display='none';
+  }
 
   var ks=Object.keys(CATS);var tH='';
   ks.forEach(function(k){

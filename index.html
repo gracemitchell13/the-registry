@@ -49,6 +49,7 @@ html.holiday .hdr-add{box-shadow:0 0 0 1px rgba(228,199,122,.6)}
 html.holiday .hdr .carousel-img{outline:1.5px solid rgba(228,199,122,.55);outline-offset:-1.5px}
 html.holiday .acrd{border-top:3px solid #A8243B}
 html.holiday .acrd.alt{border-top-color:#2F5443}
+html.holiday .stock-h::after{content:"  ✦ small joys";font-family:'Playfair Display',Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0;font-weight:500;font-size:14px;color:#A8243B}
 html.holiday .tops-h::after{content:"  ✦ Santa, take note";font-family:'Playfair Display',Georgia,serif;font-style:italic;text-transform:none;letter-spacing:0;font-weight:500;font-size:14px;color:#A8243B}
 .snow{position:absolute;inset:0;pointer-events:none;z-index:0;display:none}
 html.holiday .snow{display:block}
@@ -186,8 +187,8 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
   .charts-grid{grid-template-columns:1fr !important}
 
   /* Top picks - single column */
-  #tops > div{flex-direction:column}
-  #tops > div > div{width:100%}
+  #tops > div, #stocks > div{flex-direction:column}
+  #tops > div > div, #stocks > div > div{width:100%}
 
   /* Filter tabs */
   #stabs{gap:3px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}
@@ -262,6 +263,9 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
           <option value="gifted">Gifted</option>
           <option value="archived">Archived</option>
         </select>
+      </div>
+      <div>
+        <label class="mbox-label" style="display:flex;align-items:center;gap:6px;cursor:pointer"><input id="fstocking" type="checkbox" style="width:auto;margin:0"> Stocking stuffer</label>
       </div>
       <div id="date-finished-field" style="display:none">
         <label class="mbox-label">Date acquired</label>
@@ -344,6 +348,11 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
 <div class="acrd" style="margin-bottom:1.5rem">
   <div class="sec-h tops-h" style="margin-bottom:.75rem">Most Wanted</div>
   <div id="tops"></div>
+</div>
+
+<div class="acrd" style="margin-bottom:1.5rem">
+  <div class="sec-h stock-h" style="margin-bottom:.75rem">Stocking Stuffers</div>
+  <div id="stocks"></div>
 </div>
 
 <div style="margin-bottom:.75rem">
@@ -457,7 +466,7 @@ function loadImg(e,cb){
 }
 
 function applyThumb(id,src){
-  ['th-','tp-'].forEach(function(p){
+  ['th-','tp-','ts-'].forEach(function(p){
     var el=document.getElementById(p+id);
     if(el&&src)el.innerHTML='<img class="cthumb" src="'+src+'" onerror="this.style.display=\'none\'">';
   });
@@ -586,6 +595,7 @@ function openM(id){
     var fsEl=document.getElementById('fstatus');
     for(var j=0;j<fsEl.options.length;j++) if(fsEl.options[j].value===e.status){fsEl.selectedIndex=j;break;}
     selR=e.rating||0;
+    document.getElementById('fstocking').checked=!!e.stocking;
   } else {
     document.getElementById('ftitle').value='';
     document.getElementById('fcreator').value='';
@@ -599,6 +609,7 @@ function openM(id){
     document.getElementById('fdatefinished').value='';
     document.getElementById('ft').selectedIndex=0;
     document.getElementById('fstatus').selectedIndex=0;
+    document.getElementById('fstocking').checked=false;
     selR=0;
   }
   updLbl();updateFormTheme();toggleDateFinished();initStars();paintStars(selR);updateFormPreview();
@@ -623,6 +634,7 @@ function saveE(){
     url:document.getElementById('furl').value.trim(),
     status:document.getElementById('fstatus').value,
     rating:savedRating,
+    stocking:document.getElementById('fstocking').checked,
     notes:document.getElementById('fnotes').value.trim(),
     imgurl:document.getElementById('fimgurl').value.trim(),
     datefinished:document.getElementById('fdatefinished').value||'',
@@ -788,6 +800,25 @@ function render(){
     document.getElementById('tops').innerHTML='<div style="font-size:14px;color:#999">Mark something 5 stars to see it here.</div>';
   }
 
+  var stocks=data.filter(function(e){return e.stocking&&e.status==='wanted';})
+    .sort(function(a,b){return (a.price||0)-(b.price||0);});
+  if(stocks.length){
+    var skH='<div style="display:flex;flex-wrap:wrap;gap:8px">';
+    stocks.forEach(function(e){
+      var c=CATS[e.type];var cached=imgCache[e.id];var cachedSrc=cached&&(typeof cached==='object'?cached.src:cached);
+      var ti=cachedSrc?'<img class="cthumb" src="'+cachedSrc+'" onerror="this.style.display=\'none\'">':'<span style="font-size:20px">'+c.e+'</span>';
+      var pr=(e.price!==undefined&&e.price!==null&&e.price!=='')?'$'+(Math.round(e.price*100)/100):'';
+      skH+='<div onclick="scrollToCard(\''+e.id+'\')" style="display:flex;align-items:center;gap:8px;background:var(--top-chip);border-radius:8px;padding:6px 12px 6px 6px;cursor:pointer">'
+        +'<div id="ts-'+e.id+'" style="width:42px;height:42px;border-radius:6px;flex-shrink:0;background:'+c.bg+';display:flex;align-items:center;justify-content:center;overflow:hidden">'+ti+'</div>'
+        +'<div><div style="font-size:14px;font-weight:500;max-width:140px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">'+e.title+'</div>'
+        +'<div style="font-size:12px;color:#666">'+pr+'</div></div></div>';
+    });
+    skH+='</div>';
+    document.getElementById('stocks').innerHTML=skH;
+  } else {
+    document.getElementById('stocks').innerHTML='<div style="font-size:14px;color:#999">Tick &ldquo;Stocking stuffer&rdquo; on an item to see it here.</div>';
+  }
+
   var sH='';
   [['all','All'],['wanted','Wanted'],['purchased','Purchased'],['gifted','Gifted'],['archived','Archived']].forEach(function(p){
     var on=fStatus===p[0];
@@ -886,7 +917,7 @@ function render(){
       (function(en){loadImg(en,function(src){if(src){applyThumb(en.id,src);imgCache[en.id]={src:src,id:en.id};}updateCarousel();updateConsuming();});})(e);
     }
   });
-  tops.forEach(function(e){
+  tops.concat(stocks).forEach(function(e){
     if(imgCache[e.id]===undefined){
       (function(en){loadImg(en,function(src){if(src){applyThumb(en.id,src);imgCache[en.id]={src:src,id:en.id};}});})(e);
     }

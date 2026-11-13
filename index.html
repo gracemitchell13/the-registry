@@ -63,6 +63,11 @@ html.holiday .resist-k{color:#E4C77A}
 html.holiday #status{color:#E4C77A}
 .tbtn{background:transparent;border:none;padding:6px 14px;cursor:pointer;font-size:14px;border-radius:20px;font-family:inherit;color:#555}
 .tbtn.on{font-weight:500;color:#fff}
+.ctabs{display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;margin:-.35rem 0 .85rem;font-size:12px}
+.ctab{background:none;border:0;border-bottom:1px solid transparent;padding:1px 0;font:inherit;font-size:12px;color:#999;cursor:pointer}
+.ctab:hover{color:#555}
+.ctab.on{color:#333;font-weight:600;border-bottom-color:currentColor}
+.ctab-sep{color:#ccc}
 .cat-tile{border-radius:12px;padding:.9rem 1rem;cursor:pointer;border:2px solid transparent}
 .cat-tile:hover{opacity:.85}
 .cat-tile.sel{border-color:rgba(0,0,0,.25)}
@@ -342,6 +347,7 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
   <span style="font-size:13px;color:#999;margin-right:2px">Filter:</span>
   <div id="stabs" style="display:flex;flex-wrap:wrap;gap:5px"></div>
 </div>
+<div id="ctabs" class="ctabs"></div>
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
   <span id="cnt" style="font-size:14px;color:#666"></span>
   <div style="display:flex;gap:8px;align-items:center">
@@ -729,6 +735,13 @@ function render(){
     sH+='<button class="tbtn'+(on?' on':'')+'" onclick="setSF(\''+p[0]+'\')" style="background:'+bg+';color:'+(on?'#fff':'#555')+'">'+p[1]+'</button>';
   });
   document.getElementById('stabs').innerHTML=sH;
+
+  var cT='<button class="ctab'+(fType==='all'?' on':'')+'" onclick="setTF(\'all\')">All categories</button>';
+  Object.keys(CATS).forEach(function(k){
+    var c=CATS[k],on=fType===k;
+    cT+='<span class="ctab-sep">·</span><button class="ctab'+(on?' on':'')+'" onclick="setTF(\''+(on?'all':k)+'\')"'+(on?' style="color:'+c.hd+';border-bottom-color:'+c.dot+'"':'')+'>'+c.l+'</button>';
+  });
+  document.getElementById('ctabs').innerHTML=cT;
 
   var q=(document.getElementById('search')?document.getElementById('search').value.trim().toLowerCase():'');
   var f=data.filter(function(e){

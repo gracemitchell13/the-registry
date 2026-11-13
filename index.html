@@ -307,7 +307,6 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
         <div class="hdr-title">The Registry</div>
         <div class="hdr-season">Holiday edition, for the elves in my life</div>
         <div id="hdr-stats" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
-        <div id="resist-stats" style="display:none;margin-top:.55rem"></div>
         <div id="status">Connecting...</div>
       </div>
       <div style="display:flex;gap:8px;padding-top:4px">
@@ -323,25 +322,6 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
   </div>
   <div class="carousel-wrap" id="carousel-wrap" style="display:none;padding:0 1.5rem 1.2rem">
     <div class="carousel-track" id="carousel-track"></div>
-  </div>
-</div>
-
-<div id="tiles" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:1.5rem"></div>
-
-<div class="charts-grid" style="display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:12px;margin-bottom:12px">
-  <div class="acrd">
-    <div class="sec-h" style="margin-bottom:.85rem">By category</div>
-    <div id="cchart"></div>
-    <div style="display:flex;gap:12px;margin-top:.75rem;flex-wrap:wrap">
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span class="lg-want" style="width:9px;height:9px;border-radius:2px;background:#2C3A58;display:inline-block"></span>Wanted</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#3B6D11;display:inline-block"></span>Purchased</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#7F77DD;display:inline-block"></span>Gifted</span>
-      <span style="display:flex;align-items:center;gap:4px;font-size:12px;color:#666"><span style="width:9px;height:9px;border-radius:2px;background:#888780;display:inline-block"></span>Archived</span>
-    </div>
-  </div>
-  <div class="acrd alt">
-    <div class="sec-h" style="margin-bottom:.85rem">Want levels</div>
-    <div id="rchart" style="display:flex;align-items:flex-end;gap:4px;height:100px"></div>
   </div>
 </div>
 
@@ -370,9 +350,9 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
       <button class="view-btn" id="vbtn-list" onclick="setView('list')" title="List view">&#9776;</button>
     </div>
     <select id="srt" onchange="render()" style="font-size:13px;width:auto">
+      <option value="r-" selected>Most wanted</option>
       <option value="d-">Newest first</option>
       <option value="d+">Oldest first</option>
-      <option value="r-">Most wanted</option>
       <option value="p-">Price (high to low)</option>
       <option value="p+">Price (low to high)</option>
       <option value="az">A-Z</option>
@@ -703,83 +683,6 @@ function render(){
       +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:20px;font-weight:500;color:var(--hdr-ink);line-height:1">'+s.v+'</span><span style="font-size:12px;color:var(--hdr-sub)">'+s.l+'</span></div>';
   }).join('');
 
-  // Resistance stats: archived items count + sum of their prices
-  var archived=data.filter(function(e){return e.status==='archived';});
-  var resistEl=document.getElementById('resist-stats');
-  if(archived.length){
-    var resistedVal=archived.filter(function(e){return typeof e.price==='number';})
-      .reduce(function(a,e){return a+e.price;},0);
-    var resistedDisplay=resistedVal>0?('$'+Math.round(resistedVal).toLocaleString()):'—';
-    resistEl.innerHTML='<div class="resist">'
-      +'<span class="resist-k">Resisted</span>'
-      +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:18px;font-weight:500;color:var(--hdr-ink);line-height:1">'+archived.length+'</span><span style="font-size:12px;color:var(--hdr-sub)">items</span></div>'
-      +'<span style="color:var(--hdr-sub);opacity:.5;font-size:13px">·</span>'
-      +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:18px;font-weight:500;color:var(--hdr-ink);line-height:1">'+resistedDisplay+'</span><span style="font-size:12px;color:var(--hdr-sub)">not spent</span></div>'
-    +'</div>';
-    resistEl.style.display='block';
-  } else {
-    resistEl.style.display='none';
-  }
-
-  var ks=Object.keys(CATS);var tH='';
-  ks.forEach(function(k){
-    var c=CATS[k];var it=data.filter(function(e){return e.type===k;});
-    var wt=it.filter(function(e){return e.status==='wanted';}).length;
-    var pu=it.filter(function(e){return e.status==='purchased';}).length;
-    var gf=it.filter(function(e){return e.status==='gifted';}).length;
-    var ar=it.filter(function(e){return e.status==='archived';}).length;
-    var tot=it.length||1;var sel=fType===k;
-    tH+='<div class="cat-tile'+(sel?' sel':'')+'" onclick="setTF(\''+(sel?'all':k)+'\')" style="background:'+c.bg+';border-color:'+(sel?c.dot:'transparent')+'">'
-      +'<div style="font-size:20px;line-height:1;margin-bottom:4px">'+c.e+'</div>'
-      +'<div style="font-size:12px;font-weight:500;color:'+c.tx+';margin-bottom:1px">'+c.l+'</div>'
-      +'<div style="font-size:24px;font-weight:500;color:'+c.hd+'">'+it.length+'</div>'
-      +'<div style="height:5px;border-radius:3px;overflow:hidden;background:rgba(0,0,0,.08);display:flex;margin-top:5px">'
-        +'<div style="width:'+Math.round(wt/tot*100)+'%;height:100%;background:'+c.hd+'"></div>'
-        +'<div style="width:'+Math.round(pu/tot*100)+'%;height:100%;background:'+c.dot+'"></div>'
-        +'<div style="width:'+Math.round(gf/tot*100)+'%;height:100%;background:'+c.dot+';opacity:.5"></div>'
-        +'<div style="width:'+Math.round(ar/tot*100)+'%;height:100%;background:#888780;opacity:.4"></div>'
-      +'</div>'
-      +'<div style="font-size:11px;color:'+c.tx+';opacity:.75;margin-top:4px">'+wt+' wanted · '+(pu+gf)+' got</div>'
-    +'</div>';
-  });
-  document.getElementById('tiles').innerHTML=tH;
-
-  var maxC=1;
-  ks.forEach(function(k){var n=data.filter(function(e){return e.type===k;}).length;if(n>maxC)maxC=n;});
-  var cH='';
-  ks.forEach(function(k){
-    var c=CATS[k];
-    var wt=data.filter(function(e){return e.type===k&&e.status==='wanted';}).length;
-    var pu=data.filter(function(e){return e.type===k&&e.status==='purchased';}).length;
-    var gf=data.filter(function(e){return e.type===k&&e.status==='gifted';}).length;
-    var ar=data.filter(function(e){return e.type===k&&e.status==='archived';}).length;
-    var tot=wt+pu+gf+ar;
-    cH+='<div class="brow"><div style="width:82px;font-size:13px;color:#666;text-align:right;flex-shrink:0">'+c.l+'</div>'
-      +'<div class="btrack">'
-        +'<div style="width:'+Math.round(wt/maxC*100)+'%;height:100%;background:'+SM.wanted.bg+'"></div>'
-        +'<div style="width:'+Math.round(pu/maxC*100)+'%;height:100%;background:#3B6D11"></div>'
-        +'<div style="width:'+Math.round(gf/maxC*100)+'%;height:100%;background:#7F77DD"></div>'
-        +'<div style="width:'+Math.round(ar/maxC*100)+'%;height:100%;background:#888780;opacity:.6"></div>'
-      +'</div>'
-      +'<div style="width:22px;font-size:13px;color:#666">'+tot+'</div></div>';
-  });
-  document.getElementById('cchart').innerHTML=cH;
-
-  var ra=data.filter(function(e){return e.rating>0;});
-  var rD=[0,0,0,0,0];
-  ra.forEach(function(e){if(e.rating>=1&&e.rating<=5)rD[e.rating-1]++;});
-  var maxR=Math.max.apply(null,rD)||1;
-  var rColors=HOLIDAY?['#CFDCCF','#A3BFA6','#6F9877','#3F6B4B','#1E3A2F']:['#D0D4E0','#A8B4CC','#8098B8','#5A7AA0','#4A5A80'];
-  var rH='';
-  rD.forEach(function(cnt,i){
-    var p=Math.round(cnt/maxR*80);
-    rH+='<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px">'
-      +'<div style="font-size:12px;color:#666;min-height:16px">'+(cnt||'')+'</div>'
-      +'<div style="width:100%;height:'+p+'px;background:'+rColors[i]+';border-radius:3px 3px 0 0;min-height:'+(cnt?4:0)+'px"></div>'
-      +'<div style="font-size:12px;color:#666">'+(i+1)+'★</div>'
-    +'</div>';
-  });
-  document.getElementById('rchart').innerHTML=rH;
 
   var tops=data.filter(function(e){return e.rating>=5&&e.status==='wanted';})
     .sort(function(a,b){return b.date.localeCompare(a.date);})
@@ -840,7 +743,7 @@ function render(){
   var srt=document.getElementById('srt').value;
   if(srt==='d-') f.sort(function(a,b){return b.date.localeCompare(a.date);});
   else if(srt==='d+') f.sort(function(a,b){return a.date.localeCompare(b.date);});
-  else if(srt==='r-') f.sort(function(a,b){return b.rating-a.rating;});
+  else if(srt==='r-') f.sort(function(a,b){return (b.rating||0)-(a.rating||0)||b.date.localeCompare(a.date);});
   else if(srt==='p-') f.sort(function(a,b){var pa=typeof a.price==='number'?a.price:-1;var pb=typeof b.price==='number'?b.price:-1;return pb-pa;});
   else if(srt==='p+') f.sort(function(a,b){var pa=typeof a.price==='number'?a.price:Infinity;var pb=typeof b.price==='number'?b.price:Infinity;return pa-pb;});
   else f.sort(function(a,b){return a.title.localeCompare(b.title);});

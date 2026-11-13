@@ -312,7 +312,6 @@ button{padding:8px 16px;border:0.5px solid rgba(0,0,0,.2);border-radius:8px;font
         <div class="hdr-kicker">Things I want but am resisting</div>
         <div class="hdr-title">The Registry</div>
         <div class="hdr-season">Holiday edition, for the elves in my life</div>
-        <div id="hdr-stats" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"></div>
         <div id="status">Connecting...</div>
       </div>
       <div style="display:flex;gap:8px;padding-top:4px">
@@ -678,18 +677,6 @@ function setTF(t){fType=t;render();}
 function setSF(s){fStatus=s;render();}
 
 function render(){
-  var total=data.length;
-  var wanted=data.filter(function(e){return e.status==='wanted';}).length;
-  var got=data.filter(function(e){return e.status==='purchased'||e.status==='gifted';}).length;
-  var totalVal=data.filter(function(e){return e.status==='wanted'&&typeof e.price==='number';})
-    .reduce(function(a,e){return a+e.price;},0);
-  var valDisplay=totalVal>0?('$'+Math.round(totalVal).toLocaleString()):'—';
-  document.getElementById('hdr-stats').innerHTML=[
-    {v:total,l:'items'},{v:wanted,l:'wanted'},{v:got,l:'acquired'},{v:valDisplay,l:'wishlist value'}
-  ].map(function(s,i){
-    return (i?'<span style="color:var(--hdr-sub);opacity:.5;font-size:13px">·</span>':'')
-      +'<div style="display:flex;align-items:baseline;gap:4px"><span style="font-size:20px;font-weight:500;color:var(--hdr-ink);line-height:1">'+s.v+'</span><span style="font-size:12px;color:var(--hdr-sub)">'+s.l+'</span></div>';
-  }).join('');
 
 
   var tops=data.filter(function(e){return e.rating>=5&&e.status==='wanted';})
